@@ -1,0 +1,143 @@
+.right-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    padding: 30px;
+    padding-left: 0;
+
+    height: calc(100vh - 80px);
+    overflow-y: auto;
+}
+
+.right-sidebar-label {
+    font-size: 18px;
+    font-weight: 300;
+    letter-spacing: 3px;
+    margin-bottom: 25px;
+
+    color: var(--color-grey);
+}
+
+.info-box {
+    width: 380px;
+    padding: 30px;
+    
+    background: var(--color-black);
+    border-radius: 10px;
+}
+
+.rule-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 15px 10px;
+    user-select: none;
+    transition: 0.2s ease;
+    border-radius: 5px;
+}
+
+.rule-header:hover {
+    color: var(--color-beige);
+    background-color: var(--color-raven);
+}
+
+.rule-title {
+    display: flex;
+    gap: 20px;
+}
+
+.info-text {
+    font-size: 16px;
+    color: var(--color-light-grey);
+    line-height: 1.2;
+}
+
+.rule-item {
+    margin: 10px 0;
+}
+
+.rule-caret {
+    stroke: var(--color-beige);
+    flex-shrink: 0;
+    transform-origin: center;
+    transition: transform 0.2s;
+    user-select: none;
+}
+
+.rule-caret.open { 
+    
+    transform: rotate(180deg); 
+}
+
+.rule-body {
+    display: none;
+    padding: 5px 38px;
+}
+
+.rule-body.open { 
+    display: block; 
+}
+
+.bookmarks-section {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.bookmark-link {
+    height: 50px;
+    width: 100%;
+    
+    display: flex;
+    align-items: center;
+    padding: 18px;
+
+    font-size: 20px;
+    color: var(--color-beige);
+    background: var(--color-deep-blue);
+
+    border: none;
+    border-left: 7px solid var(--color-navy-blue);
+    border-top-right-radius: 10px;
+
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.bookmark-link:hover { 
+    background: var(--color-navy-blue);
+    border-left: 7px solid var(--color-dark-blue);
+}
+
+.right-sidebar-divider {
+    border: none; 
+    border-top: 1px solid var(--color-grey); 
+    margin: 30px 0;
+}
+
+.message-link {
+    height: 50px;
+    width: 100%;
+    
+    display: inline-flex;
+    align-items: center;      
+    justify-content: center;
+
+    padding: 18px;
+    margin-top: 30px;
+
+    font-size: 20px;
+    color: var(--color-beige);
+    background: var(--color-deep-blue);
+
+    border: 1px solid var(--color-dark-blue);
+    border-radius: 50px;
+
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.message-link:hover {
+    background: var(--color-navy-blue);
+    border: 1px solid var(--color-pale-blue);
+}

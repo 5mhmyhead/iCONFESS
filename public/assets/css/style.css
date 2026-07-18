@@ -1,0 +1,164 @@
+/* base style css styling and core variables */
+/* website font faces */
+@font-face {
+    src: url(../fonts/helvetica/HelveticaNeue-Light.otf) format("opentype");
+    font-family: "Helvetica Neue";
+    font-style: normal;
+    font-weight: 300;
+    font-display: swap;
+}
+
+@font-face {
+    src: url(../fonts/helvetica/HelveticaNeue-Roman.otf) format("opentype");
+    font-family: "Helvetica Neue";
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+}
+
+@font-face {
+    src: url(../fonts/helvetica/HelveticaNeue-Medium.otf) format("opentype");
+    font-family: "Helvetica Neue";
+    font-style: normal;
+    font-weight: 500;
+    font-display: swap;
+}
+
+@font-face {
+    src: url(../fonts/helvetica/HelveticaNeue-Bold.otf) format("opentype");
+    font-family: "Helvetica Neue";
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+}
+
+@font-face {
+    src: url(../fonts/playfair/PlayfairDisplay-Regular.ttf) format("truetype");
+    font-family: "Playfair Display";
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+}
+
+@font-face {
+    src: url(../fonts/playfair/PlayfairDisplay-Italic.ttf) format("truetype");
+    font-family: "Playfair Display";
+    font-style: italic;
+    font-weight: 400;
+    font-display: swap;
+}
+
+@font-face {
+    src: url(../fonts/playfair/PlayfairDisplay-MediumItalic.ttf) format("truetype");
+    font-family: "Playfair Display";
+    font-style: italic;
+    font-weight: 500;
+    font-display: swap;
+}
+
+@font-face {
+    src: url(../fonts/playfair/PlayfairDisplay-Bold.ttf) format("truetype");
+    font-family: "Playfair Display";
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+}
+
+@font-face {
+    src: url(../fonts/playfair/PlayfairDisplay-BoldItalic.ttf) format("truetype");
+    font-family: "Playfair Display";
+    font-style: italic;
+    font-weight: 700;
+    font-display: swap;
+}
+
+:root {
+    /* variable blue colors */
+    --color-deep-blue: #151A28;
+    --color-navy-blue: #22356D;
+    --color-dark-blue: #39559D;
+    --color-pale-blue: #6F91D0;
+    --color-light-blue: #86b7fe;
+    --color-blue-grey: #B8CEF6;
+
+    /* variable greyscale colors */
+    --color-black: #111111;
+    --color-raven: #1a1a1a;
+    --color-beige: #fbf5eb;
+
+    --color-card: #22232E;
+    --color-grey: #505050;
+    --color-light-grey: #606060;
+
+    /* variable fonts */
+    --font-sans: "Helvetica Neue", Arial, sans-serif;
+    --font-serif: "Playfair Display", Georgia, serif;
+}
+
+* { 
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-sans);
+    color: var(--color-beige);
+    font-weight: 400;
+
+    background-color: var(--color-raven);
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+a:hover,
+a:focus {
+    text-decoration: none;
+}
+
+/* button styling */
+.btn {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+
+    height: 50px;
+    min-width: 100px;
+
+    border-radius: 10px;
+    padding: 10px 20px;
+    gap: 8px;
+
+    font-family: var(--font-sans);
+    font-size: 18px;
+}
+
+.btn-blue {
+    color: var(--color-beige);
+    background-color: var(--color-navy-blue);
+    border: 1px solid var(--color-beige);
+
+    transition: 0.3s ease;
+}
+
+.btn-blue:hover {
+    color: var(--color-navy-blue);
+    background-color: var(--color-beige);
+}
+
+.btn-beige {
+    color: var(--color-navy-blue);
+    background-color: var(--color-beige);
+    border: 1px solid var(--color-beige);
+
+    transition: 0.3s ease;
+}
+
+.btn-beige:hover {
+    color: var(--color-beige);
+    background-color: var(--color-navy-blue);
+}
+
