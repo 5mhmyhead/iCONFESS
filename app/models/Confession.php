@@ -5,6 +5,7 @@
         private string $title;
         private string $content;
         private string $category;
+        private string $campus;
         private int $hearts;
         private string $status;
         private ?string $createdAt;
@@ -14,6 +15,7 @@
             $title = '', 
             $content = '', 
             $category = 'Miscellaneous', 
+            $campus = '',
             $hearts = 0, 
             $status = 'pending', 
             $createdAt = null
@@ -21,12 +23,11 @@
             $this -> id = $id;
             $this -> title = $title;
             $this -> content = $content;
+            $this -> category = $category;
+            $this -> campus = $campus;
             $this -> hearts = $hearts;
+            $this -> status = $status;
             $this -> createdAt = $createdAt;
-
-            // pass through setters to format values
-            $this -> setCategory($category);
-            $this -> setStatus($status);
         }
 
         public function getId(): ?int { return $this -> id; }
@@ -39,45 +40,19 @@
         public function setContent(string $content): void { $this -> content = $content; }
 
         public function getCategory(): string { return $this -> category; }
-        public function setCategory(string $category): void 
-        { 
-            // normalize the formatting of category string to match database
-            // trim whitespace, set lowercase to all characters then capitalize the first letter
-            $formattedCategory = ucfirst(strtolower(trim($category)));
-            
-            if (in_array($formattedCategory, ['Academic', 'Love', 'Drama', 'Miscellaneous'])) 
-            {
-                $this -> category = $formattedCategory; 
-            }
-            else
-            {
-                $this -> category = 'Miscellaneous';
-            }  
-        }
+        public function setCategory(string $category): void { $this -> category = $category; }
+
+        public function getCampus(): string { return $this -> campus; }
+        public function setCampus(string $campus): void { $this -> campus = $campus; }
 
         public function getHearts(): int { return $this -> hearts; }
         public function setHearts(int $hearts): void { $this -> hearts = $hearts; }
 
         public function getStatus(): string { return $this -> status; }
-        public function setStatus(string $status): void 
-        { 
-            $status = strtolower(trim($status));
-
-            if (in_array($status, ['pending', 'approved', 'rejected'])) 
-            {
-                $this->status = $status;
-            } 
-        }
+        public function setStatus(string $status) { $this -> status = $status; }
 
         public function getCreatedAt(): ?string { return $this -> createdAt; }
-        public function getFormattedTime(): string
-        {
-            if ($this -> createdAt === null) return 'Just now';
-            
-            // formats time to 'Jan 1, 2026, 6:00AM'
-            $date = new DateTime($this -> createdAt);
-            return $date -> format('M j, Y, g:i A');
-        }
+        public function setCreatedAt(string $createdAt) { $this -> createdAt = $createdAt; }
 
         public function getAllConfessions(): array
         {
@@ -103,12 +78,13 @@
 
             foreach ($rows as $row) 
             {
-                $confessions[] = new self(
-                    (int) $row['id'],
+                $confessions[] = new Confession(
+                    $row['id'],
                     $row['title'],
                     $row['content'],
                     $row['category'],
-                    (int) $row['hearts'],
+                    $row['campus'],
+                    $row['hearts'],
                     $row['status'],
                     $row['created_at']
                 );

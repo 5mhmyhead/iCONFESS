@@ -15,7 +15,7 @@
     letter-spacing: 3px;
     margin-bottom: 25px;
 
-    color: var(--color-grey);
+    color: var(--color-grey-400);
 }
 
 .info-box {
@@ -37,8 +37,8 @@
 }
 
 .rule-header:hover {
-    color: var(--color-beige);
-    background-color: var(--color-raven);
+    color: var(--color-white);
+    background-color: var(--color-grey-200);
 }
 
 .rule-title {
@@ -48,7 +48,7 @@
 
 .info-text {
     font-size: 16px;
-    color: var(--color-light-grey);
+    color: var(--color-grey-500);
     line-height: 1.2;
 }
 
@@ -57,7 +57,7 @@
 }
 
 .rule-caret {
-    stroke: var(--color-beige);
+    stroke: var(--color-white);
     flex-shrink: 0;
     transform-origin: center;
     transition: transform 0.2s;
@@ -93,11 +93,11 @@
     padding: 18px;
 
     font-size: 20px;
-    color: var(--color-beige);
-    background: var(--color-deep-blue);
+    color: var(--color-white);
+    background: var(--color-primary-900);
 
     border: none;
-    border-left: 7px solid var(--color-navy-blue);
+    border-left: 7px solid var(--color-primary-500);
     border-top-right-radius: 10px;
 
     cursor: pointer;
@@ -105,13 +105,13 @@
 }
 
 .bookmark-link:hover { 
-    background: var(--color-navy-blue);
-    border-left: 7px solid var(--color-dark-blue);
+    background: var(--color-primary-500);
+    border-left: 7px solid var(--color-primary-400);
 }
 
 .right-sidebar-divider {
     border: none; 
-    border-top: 1px solid var(--color-grey); 
+    border-top: 1px solid var(--color-grey-400); 
     margin: 30px 0;
 }
 
@@ -127,10 +127,10 @@
     margin-top: 30px;
 
     font-size: 20px;
-    color: var(--color-beige);
-    background: var(--color-deep-blue);
+    color: var(--color-white);
+    background: var(--color-primary-900);
 
-    border: 1px solid var(--color-dark-blue);
+    border: 1px solid var(--color-primary-400);
     border-radius: 50px;
 
     cursor: pointer;
@@ -138,6 +138,6 @@
 }
 
 .message-link:hover {
-    background: var(--color-navy-blue);
-    border: 1px solid var(--color-pale-blue);
+    background: var(--color-primary-500);
+    border: 1px solid var(--color-primary-300);
 }

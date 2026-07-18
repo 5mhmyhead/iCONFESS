@@ -8,10 +8,10 @@ header {
     gap: 20px;
 
     padding: 20px 30px;
-    border-bottom: 1px solid var(--color-grey);
+    border-bottom: 1px solid var(--color-grey-400);
 
     height: 80px;
-    background-color: var(--color-navy-blue);
+    background-color: var(--color-primary-500);
 }
 
 .logo-sans {
@@ -36,7 +36,7 @@ header {
     font-weight: 500;
     font-size: 28px;
 
-    color: var(--color-pale-blue);
+    color: var(--color-primary-300);
     line-height: 1;
 }
 
@@ -58,15 +58,6 @@ header {
     position: absolute;
     left: 10px;
 
-    width: 32px;
-    height: 32px;
-
-    background-image: url(../../icons/search.svg);
-
-    background-repeat: no-repeat;
-    background-size: contain;
-    background-position: center;
-
     pointer-events: none;
 }
 
@@ -75,24 +66,24 @@ header {
     max-height: 50px;
     padding: 15px 15px 15px 50px;
   
-    background-color: var(--color-dark-blue);
-    border: 1px solid var(--color-pale-blue);
+    background-color: var(--color-primary-400);
+    border: 1px solid var(--color-primary-300);
     border-radius: 10px;
 
     font-size: 18px;
-    color: var(--color-blue-grey);
+    color: var(--color-primary-100);
     transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 
 .search-input:focus {
-    border-color: var(--color-light-blue);
+    border-color: var(--color-primary-200);
     outline: 0;
-    box-shadow: 0 0 0 3px var(--color-dark-blue);
+    box-shadow: 0 0 0 3px var(--color-primary-400);
 }
 
 .search-input::selection {
-    background-color: var(--color-beige);
-    color: var(--color-dark-blue);
+    background-color: var(--color-white);
+    color: var(--color-primary-400);
 }
 
 .btn-actions {

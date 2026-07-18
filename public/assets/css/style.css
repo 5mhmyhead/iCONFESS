@@ -1,5 +1,5 @@
-/* base style css styling and core variables */
-/* website font faces */
+/* base style and core css styling */
+/* font faces */
 @font-face {
     src: url(../fonts/helvetica/HelveticaNeue-Light.otf) format("opentype");
     font-family: "Helvetica Neue";
@@ -73,22 +73,22 @@
 }
 
 :root {
-    /* variable blue colors */
-    --color-deep-blue: #151A28;
-    --color-navy-blue: #22356D;
-    --color-dark-blue: #39559D;
-    --color-pale-blue: #6F91D0;
-    --color-light-blue: #86b7fe;
-    --color-blue-grey: #B8CEF6;
+    /* variable primary blue colors */
+    --color-primary-100: #B8CEF6; 
+    --color-primary-200: #86b7fe; 
+    --color-primary-300: #6F91D0; 
+    --color-primary-400: #39559D; 
+    --color-primary-500: #22356D; 
+    --color-primary-900: #151A28; 
 
     /* variable greyscale colors */
-    --color-black: #111111;
-    --color-raven: #1a1a1a;
-    --color-beige: #fbf5eb;
+    --color-grey-200: #1a1a1a; 
+    --color-grey-300: #22232E; 
+    --color-grey-400: #505050; 
+    --color-grey-500: #606060;
 
-    --color-card: #22232E;
-    --color-grey: #505050;
-    --color-light-grey: #606060;
+    --color-black: #111111;
+    --color-white: #fbf5eb; 
 
     /* variable fonts */
     --font-sans: "Helvetica Neue", Arial, sans-serif;
@@ -103,10 +103,10 @@
 
 body {
     font-family: var(--font-sans);
-    color: var(--color-beige);
+    color: var(--color-white); 
     font-weight: 400;
 
-    background-color: var(--color-raven);
+    background-color: var(--color-grey-200);
 }
 
 a {
@@ -117,6 +117,10 @@ a {
 a:hover,
 a:focus {
     text-decoration: none;
+}
+
+.noselect {
+  user-select: none;
 }
 
 /* button styling */
@@ -136,29 +140,29 @@ a:focus {
     font-size: 18px;
 }
 
-.btn-blue {
-    color: var(--color-beige);
-    background-color: var(--color-navy-blue);
-    border: 1px solid var(--color-beige);
+.btn-primary {
+    color: var(--color-white); 
+    background-color: var(--color-primary-500); 
+    border: 1px solid var(--color-white);
 
     transition: 0.3s ease;
 }
 
-.btn-blue:hover {
-    color: var(--color-navy-blue);
-    background-color: var(--color-beige);
+.btn-primary:hover {
+    color: var(--color-primary-500);
+    background-color: var(--color-white);
 }
 
-.btn-beige {
-    color: var(--color-navy-blue);
-    background-color: var(--color-beige);
-    border: 1px solid var(--color-beige);
+.btn-secondary {
+    color: var(--color-primary-500);
+    background-color: var(--color-white);
+    border: 1px solid var(--color-white);
 
     transition: 0.3s ease;
 }
 
-.btn-beige:hover {
-    color: var(--color-beige);
-    background-color: var(--color-navy-blue);
+.btn-secondary:hover {
+    color: var(--color-white);
+    background-color: var(--color-primary-500);
 }
 
