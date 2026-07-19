@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 errorAlert.style.display = 'none';
             }
 
-            fetch(appUrl('auth/login'), {
+            fetch(appUrl('auth/loginUser'), {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

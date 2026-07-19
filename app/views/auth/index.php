@@ -11,13 +11,13 @@
 
     <form id="login-form">
         <div class="form-group">
-            <label for="login-email">school email</label>
-            <input type="email" id="login-email" placeholder="youremail@iacademy.edu.ph" autocomplete="email" required>
+            <label for="login-username">username</label>
+            <input type="username" id="login-username" placeholder="enter your username" required>
         </div>
 
         <div class="form-group">
             <label for="login-password">password</label>
-            <input type="password" id="login-password" placeholder="enter your password" autocomplete="current-password" required>
+            <input type="password" id="login-password" placeholder="enter your password" required>
             <div class="forgot-password-wrapper">
                 <a href="#" class="text-link secondary-link">forgot password?</a>
             </div>

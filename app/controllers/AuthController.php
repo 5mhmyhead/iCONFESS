@@ -30,13 +30,13 @@
 
             $input = $this -> jsonInput();
 
-            $email = $input['emailInput'] ?? '';
-            $username = $input['usernameInput'] ?? '';
-            $password = $input['passwordInput'] ?? '';
-            $role = $input['roleInput'] ?? '';
+            $email = $input['email'] ?? '';
+            $username = $input['username'] ?? '';
+            $password = $input['password'] ?? '';
+            $role = $input['role'] ?? '';
 
             $result = $this -> authService -> registerUser($email, $username, $password, $role);
-            $this -> json($result, $result['success'] ? 201 : 402);
+            $this -> json($result, $result['success'] ? 201 : 422);
         }
 
         public function loginUser()
@@ -47,8 +47,8 @@
             }
 
             $input = $this -> jsonInput();
-            $username = $input['usernameInput'] ?? '';
-            $password = $input['passwordInput'] ?? '';
+            $username = $input['username'] ?? '';
+            $password = $input['password'] ?? '';
 
             $result = $this -> authService -> loginUser($username, $password);
 
