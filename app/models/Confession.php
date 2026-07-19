@@ -9,6 +9,7 @@
         private int $hearts;
         private string $status;
         private ?string $createdAt;
+        private bool $liked;
 
         public function __construct(
             $id = null, 
@@ -18,7 +19,8 @@
             $campus = '',
             $hearts = 0, 
             $status = 'pending', 
-            $createdAt = null
+            $createdAt = null,
+            $liked = false
         ) {
             $this -> id = $id;
             $this -> title = $title;
@@ -28,6 +30,7 @@
             $this -> hearts = $hearts;
             $this -> status = $status;
             $this -> createdAt = $createdAt;
+            $this -> liked = $liked;
         }
 
         public function getId(): ?int { return $this -> id; }
@@ -54,11 +57,39 @@
         public function getCreatedAt(): ?string { return $this -> createdAt; }
         public function setCreatedAt(string $createdAt) { $this -> createdAt = $createdAt; }
 
-        public function getAllConfessions(): array
+        public function isLiked(): bool { return $this -> liked; }
+        public function getFormattedTime(): string
+        {
+            if ($this -> createdAt === null) return 'Just now';
+            
+            // formats time to 'Jan 1, 2026, 6:00AM'
+            $date = new DateTime($this -> createdAt);
+            return $date -> format('M j, Y, g:i A');
+        }
+
+        public function getAllConfessions(?int $userId = null): array
         {
             $pdo = Database::connect();
-            $stmt = $pdo -> query("SELECT * FROM confessions WHERE status = 'approved' ORDER BY id DESC");
-            
+
+            if ($userId) {
+                $stmt = $pdo -> prepare(
+                    "SELECT c.*, (l.user_id IS NOT NULL) AS liked
+                    FROM confessions c
+                    LEFT JOIN confession_likes l
+                        ON l.confession_id = c.id AND l.user_id = ?
+                    WHERE c.status = 'approved'
+                    ORDER BY c.id DESC"
+                );
+                $stmt -> execute([$userId]);
+            } else {
+                $stmt = $pdo -> query(
+                    "SELECT c.*, 0 AS liked
+                    FROM confessions c
+                    WHERE c.status = 'approved'
+                    ORDER BY c.id DESC"
+                );
+            }
+
             return $this -> toObjectArray($stmt -> fetchAll(PDO::FETCH_ASSOC));
         }
 
@@ -69,6 +100,36 @@
             $stmt = $pdo -> query("SELECT * FROM confessions WHERE status = 'pending' ORDER BY id ASC");
             
             return $this -> toObjectArray($stmt -> fetchAll(PDO::FETCH_ASSOC));
+        }
+
+        public function toggleHeart(int $userId, int $id, string $action): int
+        {
+            $pdo = Database::connect();
+
+            if ($action === 'increment') 
+            {
+                $stmt = $pdo -> prepare("INSERT IGNORE INTO confession_likes (user_id, confession_id) VALUES (?, ?)");
+                $stmt -> execute([$userId, $id]);
+
+                // if the row count is greater than zero, it means the user hasn't liked the confession yet
+                if ($stmt -> rowCount() > 0) {
+                    $pdo -> prepare("UPDATE confessions SET hearts = hearts + 1 WHERE id = ? AND status = 'approved'") -> execute([$id]);
+                }
+            } 
+            else 
+            {
+                $stmt = $pdo -> prepare("DELETE FROM confession_likes WHERE user_id = ? AND confession_id = ?");
+                $stmt -> execute([$userId, $id]);
+
+                // do not decrement if row count is 0, which means there's nothing to delete
+                if ($stmt -> rowCount() > 0) {
+                    $pdo -> prepare("UPDATE confessions SET hearts = GREATEST(0, hearts - 1) WHERE id = ? AND status = 'approved'") -> execute([$id]);
+                }
+            }
+
+            $check = $pdo -> prepare("SELECT hearts FROM confessions WHERE id = ?");
+            $check -> execute([$id]);
+            return (int) $check -> fetchColumn();
         }
 
         // helper function that converts raw associative row to an object array
@@ -86,7 +147,8 @@
                     $row['campus'],
                     $row['hearts'],
                     $row['status'],
-                    $row['created_at']
+                    $row['created_at'],
+                    $row['liked'] ?? false
                 );
             }
 

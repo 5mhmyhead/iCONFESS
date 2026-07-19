@@ -2,7 +2,7 @@
     <div class="info-box">
         <div class="right-sidebar-label">CONFESSION BOARD RULES</div>
         <div class="rule-item">
-            <div class="rule-header info-text" onclick="toggleRule(this)">
+            <div class="rule-header info-text">
                 <div class="rule-title">
                     <span>1</span>
                     <span>Post cleanly and responsibly</span>
@@ -17,7 +17,7 @@
         </div>
 
         <div class="rule-item">
-            <div class="rule-header info-text" onclick="toggleRule(this)">
+            <div class="rule-header info-text">
                 <div class="rule-title">
                     <span>2</span>
                     <span>Be respectful and mindful</span>
@@ -32,7 +32,7 @@
         </div>
 
         <div class="rule-item">
-            <div class="rule-header info-text" onclick="toggleRule(this)">
+            <div class="rule-header info-text">
                 <div class="rule-title">
                     <span>3</span>
                     <span>Adhere to school guidelines</span>
@@ -47,7 +47,7 @@
         </div>
 
         <div class="rule-item">
-            <div class="rule-header info-text" onclick="toggleRule(this)">
+            <div class="rule-header info-text">
                 <div class="rule-title">
                     <span>4</span>
                     <span>No NSFW content</span>
@@ -85,13 +85,3 @@
         <button class="message-link">Send a Message</button>
     </div>
 </div>
-
-<script>
-    function toggleRule(header) {
-        const body = header.closest('.rule-item').querySelector('.rule-body');
-        const caret = header.querySelector('.rule-caret');
-        const isOpen = body.classList.contains('open');
-        body.classList.toggle('open', !isOpen);
-        caret.classList.toggle('open', !isOpen);
-    }
-</script>

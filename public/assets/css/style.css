@@ -83,12 +83,28 @@
 
     /* variable greyscale colors */
     --color-grey-200: #1a1a1a; 
+    --color-grey-250: #151515;
     --color-grey-300: #22232E; 
+    --color-grey-350: #2b2c3b;
     --color-grey-400: #505050; 
     --color-grey-500: #606060;
+    --color-grey-600: #9896a8;
 
     --color-black: #111111;
     --color-white: #fbf5eb; 
+
+    /* error, warning, success colors */
+    --color-yellow-300: #3a2e1a;
+    --color-yellow-400: #c8a050;;
+    --color-yellow-500: #E3D796;
+
+    --color-green-300: #1e3a2a;
+    --color-green-400: #335E55;
+    --color-green-500: #66AA7A;
+
+    --color-red-300: #5c2d3a;
+    --color-red-400: #D06070;
+    --color-red-500: #F48685;
 
     /* variable fonts */
     --font-sans: "Helvetica Neue", Arial, sans-serif;
@@ -99,6 +115,8 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+
+    scrollbar-color: var(--color-grey-500) var(--color-grey-200);
 }
 
 body {
@@ -165,4 +183,3 @@ a:focus {
     color: var(--color-white);
     background-color: var(--color-primary-500);
 }
-

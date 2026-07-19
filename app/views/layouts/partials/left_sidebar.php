@@ -6,7 +6,7 @@
 <aside class="sidebar">
     <div class="sidebar-label noselect">BOARDS</div>
     <div class="sidebar-link <?= $category === '' ? 'active' : '' ?>" data-category="">all confessions</div>
-    <div class="sidebar-link <?= $category === 'School Issues' ? 'active' : '' ?>" data-category="School Issues">school issues</div>
+    <div class="sidebar-link <?= $category === 'Academic' ? 'active' : '' ?>" data-category="Academic">academic</div>
     <div class="sidebar-link <?= $category === 'Love' ? 'active' : '' ?>" data-category="Love">love</div>
     <div class="sidebar-link <?= $category === 'Drama' ? 'active' : '' ?>" data-category="Drama">drama</div>
     <div class="sidebar-link <?= $category === 'Miscellaneous' ? 'active' : '' ?>" data-category="Miscellaneous">miscellaneous</div>
