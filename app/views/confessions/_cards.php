@@ -10,7 +10,9 @@
 ?>
 
 <?php if(empty($confessions)): ?>
-    No confessions found.
+    <div id="register-error-alert" style="margin: 30px;">
+        No confessions found.
+    </div>
 <?php endif; ?>
 
 <?php foreach($confessions as $confession): ?>

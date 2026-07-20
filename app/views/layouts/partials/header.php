@@ -11,12 +11,12 @@
         </div>
     </form>
     <div class="btn-actions">
-        <a class="btn btn-primary">
+        <button id="open-form-btn" class="btn btn-primary">
             <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M12 5v14M5 12h14"/>
             </svg>
             post a confession
-        </a>
+        </button>
         <a href="?url=auth/login" class="btn btn-secondary">
             <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>

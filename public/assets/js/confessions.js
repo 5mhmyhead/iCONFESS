@@ -27,6 +27,26 @@ $(function() {
         body.toggleClass('open');
         caret.toggleClass('open');
     });
+
+    // confession post
+    const form = document.getElementById('submission-form');
+    const openBtn = document.getElementById('open-form-btn'); 
+    const closeBtn = document.getElementById('close-form-btn'); 
+
+    openBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        form.style.display = 'flex'; 
+    });
+
+    closeBtn.addEventListener('click', () => {
+        form.style.display = 'none';
+    });
+
+    form.addEventListener('click', (e) => {
+        if (e.target === form) {
+            form.style.display = 'none';
+        }
+    });
 });
 
 // code that handles users liking a confession

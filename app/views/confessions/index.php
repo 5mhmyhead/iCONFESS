@@ -9,4 +9,5 @@
     </section>
 
     <?php include '../app/views/layouts/partials/right_sidebar.php'; ?>
+    <?php include '../app/views/layouts/partials/submission_form.php'; ?>
 </div>

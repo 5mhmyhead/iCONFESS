@@ -75,6 +75,11 @@ header {
     transition: 0.15s ease-in-out;
 }
 
+.search-input::placeholder {
+    color: var(--color-primary-300); 
+    opacity: 1; 
+}
+
 .search-input:focus {
     border-color: var(--color-primary-200);
     box-shadow: 0 0 0 3px var(--color-primary-400);

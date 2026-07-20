@@ -1,7 +1,3 @@
-function appUrl(path) {
-    return '?url=' + path;
-}
-
 document.addEventListener('DOMContentLoaded', function() {
     const loginForm = document.getElementById('login-form');
     if (loginForm) { 
@@ -36,7 +32,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 } else {
                     if (errorAlert) {
                         errorAlert.textContent = res.body.message || 'Login failed';
-                        errorAlert.style.display = 'block';
+                        errorAlert.style.display = 'flex';
                     }
                 }
             })
@@ -44,7 +40,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.error('AJAX Error: ', err);
                 if (errorAlert) {
                     errorAlert.textContent = 'An unexpected error occurred.';
-                    errorAlert.style.display = 'block';
+                    errorAlert.style.display = 'flex';
                 }
             });
         });
@@ -61,6 +57,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const roleInput = document.querySelector('input[name="role"]:checked').value;
 
             const errorAlert = document.getElementById('register-error-alert');
+            const successAlert = document.getElementById('register-success-alert');
 
             if (errorAlert) {
                 errorAlert.textContent = '';
@@ -83,11 +80,20 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(response => response.json().then(data => ({ status: response.status, body: data })))
             .then(res => {
                 if (res.status === 201 || res.body.success) {
-                    window.location.href = appUrl('auth/login');
+                    if (errorAlert) errorAlert.style.display = 'none';
+        
+                    if (successAlert) {
+                        successAlert.textContent = 'Registration successful! Redirecting to login page...';
+                        successAlert.style.display = 'flex';
+                    }
+
+                    setTimeout(() => {
+                        window.location.href = appUrl('auth/login');
+                    }, 1500);
                 } else {
                     if (errorAlert) {
                         errorAlert.textContent = res.body.message || 'Registration failed';
-                        errorAlert.style.display = 'block';
+                        errorAlert.style.display = 'flex';
                     }
                 }
             })
@@ -95,9 +101,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.error('AJAX Error:', err);
                 if (errorAlert) {
                     errorAlert.textContent = 'An unexpected error occurred.';
-                    errorAlert.style.display = 'block';
+                    errorAlert.style.display = 'flex';
                 }
             });
         });
     }
 });
+
+function appUrl(path) {
+    return '?url=' + path;
+}
