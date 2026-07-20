@@ -44,5 +44,21 @@
 
             $this -> json(['success' => true, 'hearts' => $result['hearts']]);
         }
+
+        public function submit()
+        {
+            $payload = AuthMiddleware::requireAuth(); 
+            $userId = (int) $payload['sub'];
+
+            $input = $this -> jsonInput();
+
+            $title = trim($input['title'] ?? '');
+            $category = trim($input['category'] ?? '');
+            $campus = trim($input['campus'] ?? '');
+            $content = trim($input['content'] ?? '');
+
+            $result = $this -> confessionsService -> submitConfession($userId, $title, $category, $campus, $content);
+            $this -> json($result, $result['success'] ? 201 : 422);
+        }
     }
 ?>

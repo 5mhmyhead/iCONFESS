@@ -102,6 +102,21 @@
             return $this -> toObjectArray($stmt -> fetchAll(PDO::FETCH_ASSOC));
         }
 
+        public function createConfession(int $userId, string $title, string $category, string $campus, string $content): int
+        {
+            $pdo = Database::connect();
+
+            $stmt = $pdo -> prepare(
+                "INSERT INTO confessions (user_id, title, content, category, campus, status)
+                VALUES (?, ?, ?, ?, ?, 'approved')"
+            );
+            // status set to approved for now for testing
+            // swap to pending when moderator is wired
+            $stmt -> execute([$userId, $title, $content, $category, $campus]);
+
+            return (int) $pdo -> lastInsertId();
+        }
+
         public function toggleHeart(int $userId, int $id, string $action): int
         {
             $pdo = Database::connect();

@@ -2,6 +2,7 @@
     return
     [
         'confessions' => [ConfessionsController::class, 'index'],
+        'confessions/submit' => [ConfessionsController::class, 'submit'],
 
         'heart' => [ConfessionsController::class, 'heart'],
 

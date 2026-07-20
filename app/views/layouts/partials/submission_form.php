@@ -17,7 +17,7 @@
                     <label for="submit-category">Category</label>
                     <select id="submit-category" required>
                         <option value="" disabled selected hidden>select category</option>
-                        <option value="Academics">Academics</option>
+                        <option value="Academic">Academic</option>
                         <option value="Love">Love</option>
                         <option value="Drama">Drama</option>
                         <option value="Miscellaneous">Miscellaneous</option>

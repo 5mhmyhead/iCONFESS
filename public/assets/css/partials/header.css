@@ -92,6 +92,8 @@ header {
 }
 
 .btn-actions {
+    min-width: 375px;
+    justify-content: end;
     display: flex;
     gap: 20px;
 }
