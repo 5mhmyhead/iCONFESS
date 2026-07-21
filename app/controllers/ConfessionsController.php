@@ -15,10 +15,30 @@
             $userId = $payload ? (int) $payload['sub'] : null;
 
             $confessions = $this -> confessionsService -> getConfessions($userId);
+            $totalConfessions = $this -> confessionsService -> getTotalConfessions();
+            $weeklyConfessions = $this -> confessionsService -> getWeeklyConfessions();
 
             $this -> view('confessions/index', [
-                'confessions' => $confessions
+                'confessions' => $confessions,
+                'totalConfessions' => $totalConfessions,
+                'weeklyConfessions' => $weeklyConfessions
             ]);
+        }
+
+        public function filter()
+        {
+            $data = json_decode(file_get_contents('php://input'), true);
+            
+            $input = $this -> jsonInput();
+
+            $category = trim($input['category'] ?? '');
+            $campus = trim($input['campus'] ?? '');
+            $sort = trim($input['sort'] ?? 'recent');
+            $keyword = trim($input['keyword'] ?? '');
+
+            $confessions = $this -> confessionsService -> getFilteredConfessions($category, $campus, $sort, $keyword);
+
+            $this -> renderPartial('confessions/_cards', ['confessions' => $confessions]);
         }
 
         public function heart()
@@ -43,6 +63,21 @@
             }
 
             $this -> json(['success' => true, 'hearts' => $result['hearts']]);
+        }
+
+        public function report()
+        {
+            $payload = AuthMiddleware::requireAuth();
+            $userId = (int) $payload['sub'];
+
+            $input = $this -> jsonInput();
+
+            $confessionId = (int) ($input['confessionId'] ?? 0);
+            $reason = trim($input['reason'] ?? '');
+            $customReason = trim($input['customReason'] ?? '');
+
+            $result = $this -> confessionsService -> reportConfession($userId, $confessionId, $reason, $customReason);
+            $this -> json($result, $result['success'] ? 201 : 422);
         }
 
         public function submit()

@@ -3,7 +3,7 @@
         <h1 class="form-title">Submit a <span>Confession</span></h1>
         <hr class="form-divider"/>
 
-        <form id="submission-form">
+        <form id="confession-form">
             <div class="form-group">
                 <div class="field-header-row">
                     <label for="submit-title">Title</label>
@@ -58,6 +58,21 @@
                 </button>
             </div>
         </form>
-    </div>
 
+        <div id="submission-success" style="display: none;">
+            <div class="success-title">Your Confession has been <span>submitted.</span></div>
+            <div class="success-message">
+                Your confession is now in the moderation queue. A moderator will review it before it appears on the confession feed. This will usually take anywhere from a few hours to a day.
+            </div>
+            <div class="success-actions">
+                <button type="button" id="success-close-btn" class="btn btn-browse">back to feed</button>
+                <button type="button" id="success-another-btn" class="btn btn-primary">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 5v14M5 12h14"/>
+                    </svg>
+                    post another confession
+                </button>
+            </div>
+        </div>
+    </div>
 </div>

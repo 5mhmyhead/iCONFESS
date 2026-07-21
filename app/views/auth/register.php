@@ -19,7 +19,15 @@
 
             <div class="form-group">
                 <label for="register-email">school email</label>
-                <input type="email" id="register-email" placeholder="youremail@iacademy.edu.ph" required>
+                <input 
+                    type="email" 
+                    id="register-email" 
+                    name="email" 
+                    placeholder="youremail@iacademy.edu.ph" 
+                    pattern="^[a-zA-Z0-9._%+-]+@iacademy\.edu\.ph$" 
+                    title="Please use a valid @iacademy.edu.ph email address."
+                    required 
+                />
             </div>
 
             <div class="form-group">

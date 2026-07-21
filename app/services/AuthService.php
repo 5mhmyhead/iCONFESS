@@ -13,6 +13,9 @@
             $email = trim($email);
             $username = trim($username);
             $password = trim($password);
+            $role = trim($role);
+
+            $domain = '@iacademy.edu.ph';
 
             if ($username === '' || $email === '' || $password === '') {
                 return ['success' => false, 'message' => 'Registration failed. All fields are required.'];
@@ -24,6 +27,10 @@
 
             if ($this -> userModel -> findByUsername($username)) {
                 return ['success' => false, 'message' => 'Registration failed. That username is already taken.'];
+            }
+
+            if (empty($email) || substr($email, -strlen($domain)) !== $domain) {
+                return ['success' => false, 'message' => 'Registration is restricted to @iacademy.edu.ph email addresses.'];
             }
 
             $hashedPassword = password_hash($password, PASSWORD_DEFAULT);

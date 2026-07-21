@@ -34,6 +34,7 @@
     flex: 1; 
     min-width: 0;
     overflow-y: auto;
+    scrollbar-width: none;
 }
 
 .confession-card {
@@ -198,3 +199,14 @@
     transition: 0.2s ease;
 }
 
+body.user-logged-out .heart-btn:hover,
+body.user-logged-out .heart-btn:hover svg {
+    color: var(--color-grey-600);
+    stroke: var(--color-grey-600);
+}
+
+body.user-logged-out .report-btn:hover,
+body.user-logged-out .report-btn:hover svg {
+    color: var(--color-grey-400);
+    stroke: var(--color-grey-400);
+}

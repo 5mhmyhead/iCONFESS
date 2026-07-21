@@ -1,11 +1,12 @@
 <?php
     /** @var string|null $category */
     /** @var string|null $sort     */
+    /** @var string|null $campus   */
 ?>
 
 <aside class="sidebar">
     <div class="sidebar-label noselect">BOARDS</div>
-    <div class="sidebar-link <?= $category === '' ? 'active' : '' ?>" data-category="">all confessions</div>
+    <div class="sidebar-link <?= empty($category) ? 'active' : '' ?>" data-category="">all confessions</div>
     <div class="sidebar-link <?= $category === 'Academic' ? 'active' : '' ?>" data-category="Academic">academic</div>
     <div class="sidebar-link <?= $category === 'Love' ? 'active' : '' ?>" data-category="Love">love</div>
     <div class="sidebar-link <?= $category === 'Drama' ? 'active' : '' ?>" data-category="Drama">drama</div>
@@ -13,10 +14,15 @@
 
     <hr class="sidebar-divider">
 
-    <div class="sidebar-label noselect">SORT BY</div>
-    <div class="sidebar-link <?= $sort === 'recent' ? 'active' : '' ?>" data-sort="recent">recent</div>
-    <div class="sidebar-link <?= $sort === 'hot' ? 'active' : '' ?>" data-sort="hot">hot</div>
-    <div class="sidebar-link <?= $sort === 'top' ? 'active' : '' ?>" data-sort="top">top</div>
+    <div class="sidebar-label noselect">CAMPUS</div>
+    <div class="sidebar-link <?= empty($campus) ? 'active' : '' ?>" data-campus="">all campuses</div>
+    <div class="sidebar-link <?= $campus === 'Makati' ? 'active' : '' ?>" data-campus="Makati">makati</div>
+    <div class="sidebar-link <?= $campus === 'Cebu' ? 'active' : '' ?>" data-campus="Cebu">cebu</div>
 
     <hr class="sidebar-divider">
+
+    <div class="sidebar-label noselect">SORT BY</div>
+    <div class="sidebar-link <?= empty($sort) ? 'active' : '' ?>" data-sort="recent">recent</div>
+    <div class="sidebar-link <?= $sort === 'hot' ? 'active' : '' ?>" data-sort="hot">hot</div>
+    <div class="sidebar-link <?= $sort === 'top' ? 'active' : '' ?>" data-sort="top">top</div>
 </aside>

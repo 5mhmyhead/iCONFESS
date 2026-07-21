@@ -2,8 +2,10 @@
     return
     [
         'confessions' => [ConfessionsController::class, 'index'],
+        'confessions/filter' => [ConfessionsController::class, 'filter'],
         'confessions/submit' => [ConfessionsController::class, 'submit'],
-
+        'confessions/report' => [ConfessionsController::class, 'report'],
+        
         'heart' => [ConfessionsController::class, 'heart'],
 
         'auth/login' => [AuthController::class, 'index'],

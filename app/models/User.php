@@ -36,7 +36,7 @@
         public function getRole(): string { return $this -> role; }
         public function setRole(string $role): void { $this -> role = $role; }
 
-        public static function findByUsername(string $username): ?User
+        public function findByUsername(string $username): ?User
         {
             $pdo = Database::connect();
             $stmt = $pdo -> prepare('SELECT * FROM users WHERE username = ?');

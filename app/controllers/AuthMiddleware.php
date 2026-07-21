@@ -29,16 +29,19 @@
         public static function optionalAuth(): ?array
         {
             $config = require __DIR__ . '/../config/auth.php';
+
+            $token = null;
             $header = self::authorizationHeader();
 
-            if (substr($header, 0, 7) !== 'Bearer ') 
-            {
-                return null;
+            if (substr($header, 0, 7) === 'Bearer ') {
+                $token = trim(substr($header, 7));
+            } elseif (!empty($_COOKIE['jwt_token'])) {
+                $token = $_COOKIE['jwt_token'];
             }
 
-            $token = trim(substr($header, 7));
-            $payload = Jwt::verify($token, $config['jwt_secret']);
+            if (!$token) return null;
 
+            $payload = Jwt::verify($token, $config['jwt_secret']);
             return $payload ?: null;
         }
 

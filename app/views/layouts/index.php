@@ -15,7 +15,8 @@
     </main>
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <script src="assets/js/confessions.js"></script>
+    <script src="assets/js/util.js"></script>
     <script src="assets/js/auth.js"></script>
+    <script src="assets/js/confessions.js"></script>
 </body>
 </html>

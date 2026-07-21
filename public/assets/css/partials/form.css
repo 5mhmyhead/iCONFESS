@@ -44,6 +44,12 @@
 .char-counter {
     font-size: 14px;
     color: var(--color-grey-500);
+    transition: 0.2s ease;
+}
+
+.char-counter.near-limit {
+    color: var(--color-red-400);
+    font-weight: 600;
 }
 
 .form-grid-row {
@@ -58,6 +64,11 @@
 
 #submit-title {
     background-color: var(--color-grey-200);
+}
+
+textarea::placeholder {
+    color: var(--color-grey-500);
+    opacity: 1;
 }
 
 textarea {
@@ -108,6 +119,19 @@ select:not(:invalid) {
     color: var(--color-white);
 }
 
+select option {
+    background-color: var(--color-grey-200);
+    color: var(--color-grey-500);
+}
+
+select option[disabled] {
+    color: var(--color-grey-500);
+}
+
+select option:not([disabled]) {
+    color: var(--color-grey-500);
+}
+
 .security-banner {
     display: flex;
     align-items: center;
@@ -133,18 +157,73 @@ select:not(:invalid) {
     color: var(--color-green-300);
 }
 
-.form-actions {
+.form-actions,
+.success-actions {
     display: flex;
     justify-content: flex-end;
+    align-items: center;
     gap: 16px;
+    width: 100%;
 }
 
-.form-actions .btn-browse,
-.form-actions .btn-submit {
+.success-actions .btn {
+    display: flex;  
+    align-items: center; 
+    justify-content: center; 
+    gap: 8px; 
     width: auto;
     padding: 12px 24px;
 }
 
-#close-form-btn {
+.form-actions .btn-browse,
+.form-actions .btn-submit,
+.success-actions .success-close-btn,
+.success-actions .success-another-btn {
+    width: auto;
+    padding: 12px 24px;
+}
+
+#close-form-btn,
+#success-close-btn,
+#report-success-close-btn,
+#alert-modal-close-btn {
     font-size: 18px;
+}
+
+#submission-success,
+#report-success {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 16px;
+}
+
+.success-title {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 28px;
+    font-weight: 500;
+    color: var(--color-white);
+}
+
+.success-title span {
+    color: var(--color-primary-100);
+}
+
+.success-message {
+    font-size: 16px;
+    color: var(--color-grey-500);
+    margin-bottom: 20px;
+}
+
+.alert-card {
+    background-color: var(--color-black);
+    border: 1px solid var(--color-grey-400);
+
+    border-radius: 10px;
+    max-width: 380px;
+    width: 100%;
+    
+    padding: 25px;
 }

@@ -102,6 +102,81 @@
             return $this -> toObjectArray($stmt -> fetchAll(PDO::FETCH_ASSOC));
         }
 
+        public function getConfessionsByTitle(string $keyword): array
+        {
+            $pdo = Database::connect();
+            $stmt = $pdo -> prepare("SELECT * FROM confessions WHERE status = 'approved' AND title LIKE ? ORDER BY created_at DESC");
+            $stmt -> execute(['%' . $keyword . '%']);
+
+            return $this -> toObjectArray($stmt -> fetchAll(PDO::FETCH_ASSOC));
+        }
+
+        public function getTotalConfessions(): int
+        {
+            $pdo = Database::connect();
+
+            $totalStmt = $pdo -> query("SELECT COUNT(*) FROM confessions");
+            $totalConfessions = (int) $totalStmt -> fetchColumn();
+
+            return $totalConfessions;
+        }
+
+        public function getWeeklyConfessions(): int
+        {
+            $pdo = Database::connect();
+
+            $weeklyStmt = $pdo -> query("SELECT COUNT(*) FROM confessions WHERE created_at >= NOW() - INTERVAL 7 DAY");
+            $weeklyConfessions = (int) $weeklyStmt -> fetchColumn();
+
+            return $weeklyConfessions;
+        }
+
+        public function getFilteredConfessions(string $category, string $campus, string $sort, string $keyword): array 
+        {
+            $pdo = Database::connect();
+            $where = ["status = 'approved'"];
+            $params = [];
+
+            if($category !== '') 
+            {
+                $where[]  = 'category = ?';
+                $params[] = $category;
+            }
+
+            if($campus !== '') 
+            {
+                $where[]  = 'campus = ?';
+                $params[] = $campus;
+            }
+
+            if($keyword !== '') 
+            {
+                $where[]  = 'title LIKE ?';
+                $params[] = '%' . $keyword . '%';
+            }
+
+            if($sort === 'hot') 
+            {
+                $where[]  = 'created_at >= NOW() - INTERVAL 7 DAY';
+                $orderBy  = 'ORDER BY hearts DESC, created_at DESC';
+            } 
+            elseif($sort === 'top') 
+            {
+                $orderBy  = 'ORDER BY hearts DESC';
+            } 
+            else 
+            {
+                $orderBy  = 'ORDER BY created_at DESC';
+            }
+
+            $sql = 'SELECT * FROM confessions WHERE ' . implode(' AND ', $where) . ' ' . $orderBy;
+
+            $stmt = $pdo -> prepare($sql);
+            $stmt -> execute($params);
+
+            return $this -> toObjectArray($stmt -> fetchAll(PDO::FETCH_ASSOC));
+        }
+
         public function createConfession(int $userId, string $title, string $category, string $campus, string $content): int
         {
             $pdo = Database::connect();

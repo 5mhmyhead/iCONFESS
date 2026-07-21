@@ -1,4 +1,10 @@
 document.addEventListener('DOMContentLoaded', function() {
+    if (!getTokenPayload()) {
+        document.body.classList.add('user-logged-out');
+    } else {
+        document.body.classList.remove('user-logged-out');
+    }
+
     initLoginForm();
     initRegisterForm();
     syncAuthState();
@@ -52,6 +58,8 @@ function initLoginForm() {
             .then(res => {
                 if(res.status === 200 || res.body.success) {
                     localStorage.setItem('jwt_token', res.body.token);
+                    // set as cookie for heart interactions
+                    document.cookie = `jwt_token=${res.body.token}; path=/; max-age=${res.body.expires_in}; SameSite=Lax`;
                     window.location.href = appUrl('confessions');
                 } else {
                     showAlert(errorAlert, res.body.message || 'Login failed.');
@@ -120,7 +128,8 @@ function syncAuthState() {
         authBtn.addEventListener('click', function(e) {
             e.preventDefault();
             localStorage.removeItem('jwt_token');
-            window.location.href = appUrl('confessions');
+            document.cookie = 'jwt_token=; path=/; max-age=0';
+            window.location.href = appUrl('auth/login');
         });
 
     } else {
@@ -129,3 +138,4 @@ function syncAuthState() {
         }
     }
 }
+

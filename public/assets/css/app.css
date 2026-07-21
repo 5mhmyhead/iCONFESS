@@ -1,7 +1,8 @@
 @import 'style.css';
+@import '404.css';
 @import 'partials/header.css';
-@import 'partials/submission_form.css';
 @import 'partials/left_sidebar.css';
 @import 'partials/right_sidebar.css';
 @import 'partials/feed.css';
 @import 'partials/auth.css';
+@import 'partials/form.css';
