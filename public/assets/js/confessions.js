@@ -278,6 +278,39 @@ $(function() {
         .catch(err => console.error('Filter error:', err));
     }
 
+    // list/grid view toggle
+    function initViewToggle() {
+        const $container = $('.confessions-list-inner');
+        const $btnList = $('#btn-list-view');
+        const $btnGrid = $('#btn-grid-view');
+
+        if (!$btnList.length || !$btnGrid.length) return;
+
+        // restore saved view mode on load
+        const savedView = localStorage.getItem('confessions_view_mode') || 'list';
+        if (savedView === 'grid') {
+            $container.addClass('grid-view');
+            $btnGrid.addClass('active');
+            $btnList.removeClass('active');
+        }
+
+        $(document).on('click', '#btn-list-view', function() {
+            $container.removeClass('grid-view');
+            $btnList.addClass('active');
+            $btnGrid.removeClass('active');
+            localStorage.setItem('confessions_view_mode', 'list');
+        });
+
+        $(document).on('click', '#btn-grid-view', function() {
+            $container.addClass('grid-view');
+            $btnGrid.addClass('active');
+            $btnList.removeClass('active');
+            localStorage.setItem('confessions_view_mode', 'grid');
+        });
+    }
+
+    initViewToggle();
+
     $(document).on('click', '.message-link', function(e) {
         e.preventDefault();
         const email = "c202401138@iacademy.edu.ph";
