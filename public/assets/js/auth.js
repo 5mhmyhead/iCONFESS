@@ -73,6 +73,24 @@ function initRegisterForm() {
     const form = document.getElementById('register-form');
     if(!form) return;
 
+    const roleRadios = form.querySelectorAll('input[name="role"]');
+    const modSecretGroup = document.getElementById('mod-secret-group');
+    const modSecretInput = document.getElementById('register-mod-secret');
+
+    // toggle moderator input when radio buttons change
+    roleRadios.forEach(radio => {
+        radio.addEventListener('change', function() {
+            if (this.value === 'moderator') {
+                modSecretGroup.style.display = 'block';
+                modSecretInput.required = true;
+            } else {
+                modSecretGroup.style.display = 'none';
+                modSecretInput.required = false;
+                modSecretInput.value = '';
+            }
+        });
+    });
+
     form.addEventListener('submit', function(e) {
         e.preventDefault();
 
@@ -81,12 +99,19 @@ function initRegisterForm() {
         hideAlert(errorAlert);
 
         const roleInput = document.querySelector('input[name="role"]:checked');
+        const selectedRole = roleInput ? roleInput.value : 'user';
+
+        if (selectedRole === 'moderator' && !modSecretInput.value.trim()) {
+            showAlert(errorAlert, 'Please enter the moderator passcode.');
+            return;
+        }
 
         const data = {
             username: document.getElementById('register-username').value,
-            email:    document.getElementById('register-email').value,
+            email: document.getElementById('register-email').value,
             password: document.getElementById('register-password').value,
-            role:     roleInput ? roleInput.value : ''
+            role: selectedRole,
+            mod_secret: modSecretInput.value
         };
 
         postJson('auth/registerUser', data)
@@ -138,4 +163,3 @@ function syncAuthState() {
         }
     }
 }
-

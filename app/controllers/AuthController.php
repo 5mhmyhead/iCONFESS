@@ -33,7 +33,24 @@
             $email = $input['email'] ?? '';
             $username = $input['username'] ?? '';
             $password = $input['password'] ?? '';
-            $role = $input['role'] ?? '';
+            $role = $input['role'] ?? 'user';
+            $modSecret = $input['mod_secret'] ?? '';
+
+            // passcode required to register as moderator
+            $expectedModSecret = $this -> authConfig['mod_secret'] ?? 'studyhard2026';
+
+            if ($role === 'moderator') 
+            {
+                if (empty($modSecret) || $modSecret !== $expectedModSecret) 
+                {
+                    $this -> json(['success' => false, 'message' => 'Invalid moderator passcode.'], 403);
+                    return;
+                }
+            } 
+            else 
+            {
+                $role = 'user';
+            }
 
             $result = $this -> authService -> registerUser($email, $username, $password, $role);
             $this -> json($result, $result['success'] ? 201 : 422);

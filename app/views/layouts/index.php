@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="assets/css/app.css">
 </head>
 <body>
+    <?php include '../app/views/layouts/page_loader.php'; ?>
     <main class="container py-4">
         <?= $content ?>
     </main>

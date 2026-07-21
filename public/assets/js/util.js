@@ -16,10 +16,11 @@ function getTokenPayload() {
     }
 }
 
-// page loader
 window.addEventListener('load', function () {
     const loader = document.getElementById('page-loader');
     if (loader) {
-        loader.classList.add('hidden');
+        setTimeout(function () {
+            loader.classList.add('hidden');
+        }, 200); 
     }
 });

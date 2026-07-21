@@ -1,4 +1,3 @@
-<?php include '../app/views/layouts/page_loader.php'; ?>
 <?php include '../app/views/layouts/partials/header.php'; ?>
 
 <div class="feed-content">

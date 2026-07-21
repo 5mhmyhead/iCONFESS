@@ -35,6 +35,11 @@
                 <input type="password" id="register-password" placeholder="create a strong password" required>
             </div>
 
+            <div class="form-group" id="mod-secret-group" style="display: none;">
+                <label for="register-mod-secret">moderator passcode</label>
+                <input type="password" id="register-mod-secret" placeholder="enter secret passcode">
+            </div>
+
             <div class="form-group">
                 <label>choose account type</label>
                 <div class="role-grid">
@@ -50,7 +55,6 @@
                     </label>
                     <label class="role-card">
                         <input type="radio" name="role" value="moderator">
-                        
                         <div class="role-content">
                             <div class="role-header">
                                 <div class="radio-indicator"></div>
