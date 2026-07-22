@@ -10,10 +10,9 @@
 
         'auth/login' => [AuthController::class, 'index'],
         'auth/loginUser' => [AuthController::class, 'loginUser'],
-
         'auth/register' => [AuthController::class, 'register'],
         'auth/registerUser' => [AuthController::class, 'registerUser'],
-        
+        'auth/forgotPassword' => [AuthController::class, 'forgotPassword'],
         'auth/logout' => [AuthController::class, 'logout'],
     ];
 ?>

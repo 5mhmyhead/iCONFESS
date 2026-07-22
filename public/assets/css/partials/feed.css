@@ -396,3 +396,8 @@ body.user-logged-out .report-btn:hover svg {
     border-color: var(--color-primary-300);
     color: var(--color-primary-100);
 }
+
+.confessions-list-inner.grid-view .empty-state-full {
+    grid-column: 1 / -1;
+    width: 100%;
+}

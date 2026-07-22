@@ -10,7 +10,7 @@
 ?>
 
 <?php if(empty($confessions)): ?>
-    <div id="register-error-alert" style="margin: 30px;">
+    <div id="register-error-alert" class="empty-state-full">
         No confessions found.
     </div>
 <?php endif; ?>
