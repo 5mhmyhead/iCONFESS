@@ -128,6 +128,41 @@
             ]);
         }
 
+        public function sendPasswordReset()
+        {
+            $input = $this -> jsonInput();
+            $email = trim($input['email'] ?? '');
+
+            $result = $this -> authService -> forgotPassword($email);
+            $this -> json($result, $result['success'] ? 200 : 422);
+        }
+
+        public function resetPasswordForm()
+        {
+            $totalConfessions = $this -> confessionsService -> getTotalConfessions();
+            $weeklyConfessions = $this -> confessionsService -> getWeeklyConfessions();
+            $accountsLive = $this -> authService -> getAccountsLive();
+
+            $this -> view('auth/index', [
+                'error' => '',
+                'formView' => '../app/views/auth/_reset_password.php',
+                'totalConfessions' => $totalConfessions,
+                'weeklyConfessions' => $weeklyConfessions,
+                'accountsLive' => $accountsLive
+            ]);
+        }
+
+        public function resetPassword()
+        {
+            $input = $this -> jsonInput();
+            $token = trim($input['token'] ?? '');
+            $password = trim($input['password'] ?? '');
+            $confirmPassword = trim($input['confirmPassword'] ?? '');
+
+            $result = $this -> authService -> resetPassword($token, $password, $confirmPassword);
+            $this -> json($result, $result['success'] ? 200 : 422);
+        }
+
         public function logout()
         {
             session_destroy();

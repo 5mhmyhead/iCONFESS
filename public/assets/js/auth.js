@@ -135,3 +135,60 @@ document.getElementById('auth-action-btn')?.addEventListener('click', function(e
     document.cookie = 'jwt_token=; path=/; max-age=0';
     window.location.href = appUrl('auth/login');
 });
+
+document.getElementById('forgot-form')?.addEventListener('submit', function (e) {
+    e.preventDefault();
+    const submitBtn = this.querySelector('button[type="submit"]');
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Sending...';
+
+    const errorAlert = document.getElementById('forgot-error-alert');
+    const successAlert = document.getElementById('forgot-success-alert');
+    hideAlert(errorAlert);
+    hideAlert(successAlert);
+
+    const email = document.getElementById('forgot-email').value;
+
+    postJson('auth/sendPasswordReset', { email })
+        .then(res => {
+            if (res.body.success) {
+                showAlert(successAlert, res.body.message);
+            } else {
+                showAlert(errorAlert, res.body.message || 'Something went wrong.');
+            }
+        })
+        .catch(() => showAlert(errorAlert, 'An unexpected error occurred.'))
+        .finally(() => {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'send reset link';
+        });
+});
+
+document.getElementById('reset-form')?.addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    const errorAlert = document.getElementById('reset-error-alert');
+    const successAlert = document.getElementById('reset-success-alert');
+    hideAlert(errorAlert);
+    hideAlert(successAlert);
+
+    const token = document.querySelector('input[name="token"]').value;
+    const password = document.getElementById('reset-password').value;
+    const confirmPassword = document.getElementById('reset-password-confirm').value;
+
+    if (password !== confirmPassword) {
+        showAlert(errorAlert, 'Passwords do not match.');
+        return;
+    }
+
+    postJson('auth/resetPassword', { token, password, confirmPassword })
+        .then(res => {
+            if (res.body.success) {
+                showAlert(successAlert, 'Password updated! Redirecting to login...');
+                setTimeout(() => window.location.href = appUrl('auth/login'), 1500);
+            } else {
+                showAlert(errorAlert, res.body.message || 'Reset failed.');
+            }
+        })
+        .catch(() => showAlert(errorAlert, 'An unexpected error occurred.'));
+});

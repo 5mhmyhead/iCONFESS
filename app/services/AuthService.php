@@ -2,10 +2,16 @@
     class AuthService
     {
         private User $userModel;
+        private PasswordReset $passwordResetModel;
+        private Mailer $mailer;
+        private array $mailConfig;
 
         public function __construct()
         {
             $this -> userModel = new User();
+            $this -> passwordResetModel = new PasswordReset();
+            $this -> mailer = new Mailer();
+            $this -> mailConfig = require __DIR__ . '/../config/mail.php';
         }
 
         public function registerUser(string $email, string $username, string $password, string $role = 'user'): array
@@ -57,6 +63,68 @@
             }
 
             return ['success' => true, 'user' => $user];
+        }
+
+        public function forgotPassword(string $email): array
+        {
+            $email = trim($email);
+
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) 
+            {
+                return ['success' => false, 'message' => 'Invalid email format.'];
+            }
+
+            $user = User::findByEmail($email);
+
+            if (!$user) 
+            {
+                return ['success' => true, 'message' => 'If that email is registered, a reset link has been sent.'];
+            }
+
+            $token = bin2hex(random_bytes(32));
+
+            $this -> passwordResetModel -> create($user -> getId(), $token, 1800);
+
+            $resetLink = $this -> mailConfig['app_url'] . '?url=auth/reset&token=' . $token;
+            $this -> mailer -> sendPasswordReset($user -> getEmail(), $resetLink);
+
+            return ['success' => true, 'message' => 'If that email is registered, a reset link has been sent.'];
+        }
+
+        public function resetPassword(string $token, string $newPassword, string $confirmPassword): array
+        {
+            if ($token === '') 
+            {
+                return ['success' => false, 'message' => 'Invalid or missing reset token.'];
+            }
+
+            if ($newPassword === '' || $confirmPassword === '')
+            {
+                return ['success' => false, 'message' => 'Both password fields are required.'];
+            }
+
+            if ($newPassword !== $confirmPassword) 
+            {
+                return ['success' => false, 'message' => 'Passwords do not match.'];
+            }
+
+            if (strlen($newPassword) < 8) 
+            {
+                return ['success' => false, 'message' => 'Password must be at least 8 characters.'];
+            }
+
+            $reset = $this -> passwordResetModel -> findValidByToken($token);
+
+            if (!$reset) 
+            {
+                return ['success' => false, 'message' => 'This reset link is invalid or has expired.'];
+            }
+
+            $hashed = password_hash($newPassword, PASSWORD_DEFAULT);
+            $this -> userModel -> updatePassword((int) $reset['user_id'], $hashed);
+            $this -> passwordResetModel -> markUsed((int) $reset['id']);
+
+            return ['success' => true, 'message' => 'Password updated successfully.'];
         }
 
         public function getAccountsLive(): int

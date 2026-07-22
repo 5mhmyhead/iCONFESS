@@ -81,7 +81,11 @@
 
 #login-error-alert,
 #register-error-alert,
-#register-success-alert {
+#register-success-alert,
+#forgot-success-alert,
+#reset-success-alert,
+#forgot-error-alert,
+#reset-error-alert {
     display: flex;
     align-items: center;
     gap: 15px;
@@ -97,7 +101,11 @@
 
 #login-error-alert::before,
 #register-error-alert::before,
-#register-success-alert::before {
+#register-success-alert::before,
+#forgot-success-alert::before,
+#reset-success-alert::before,
+#forgot-error-alert::before,
+#reset-error-alert::before {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -113,24 +121,32 @@
 }
 
 #login-error-alert,
-#register-error-alert {
+#register-error-alert,
+#forgot-error-alert,
+#reset-error-alert {
     background-color: var(--color-red-300);
     border: 1px solid var(--color-red-400);
 }
 
 #login-error-alert::before,
-#register-error-alert::before {
+#register-error-alert::before,
+#forgot-error-alert::before,
+#reset-error-alert::before {
     content: '!';
     background-color: var(--color-white); 
     color: var(--color-red-300); 
 }
 
-#register-success-alert {
+#register-success-alert,
+#reset-success-alert,
+#forgot-success-alert {
     background-color: var(--color-green-300); 
     border: 1px solid var(--color-green-500); 
 }
 
-#register-success-alert::before {
+#register-success-alert::before,
+#reset-success-alert::before,
+#forgot-success-alert::before {
     content: '✓';
     background-color: var(--color-green-500); 
     color: var(--color-green-300);
