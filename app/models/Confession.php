@@ -67,30 +67,44 @@
             return $date -> format('M j, Y, g:i A');
         }
 
-        public function getAllConfessions(?int $userId = null): array
+        public function getAllConfessions(?int $userId = null, int $page = 1, int $perPage = 20): array
         {
             $pdo = Database::connect();
+            $offset = ($page - 1) * $perPage;
 
             if ($userId) {
                 $stmt = $pdo -> prepare(
                     "SELECT c.*, (l.user_id IS NOT NULL) AS liked
                     FROM confessions c
-                    LEFT JOIN confession_likes l
-                        ON l.confession_id = c.id AND l.user_id = ?
+                    LEFT JOIN confession_likes l ON l.confession_id = c.id AND l.user_id = ?
                     WHERE c.status = 'approved'
-                    ORDER BY c.id DESC"
+                    ORDER BY c.id DESC
+                    LIMIT ? OFFSET ?"
                 );
-                $stmt -> execute([$userId]);
+                $stmt -> bindValue(1, $userId, PDO::PARAM_INT);
+                $stmt -> bindValue(2, $perPage, PDO::PARAM_INT);
+                $stmt -> bindValue(3, $offset, PDO::PARAM_INT);
+                $stmt -> execute();
             } else {
-                $stmt = $pdo -> query(
+                $stmt = $pdo -> prepare(
                     "SELECT c.*, 0 AS liked
                     FROM confessions c
                     WHERE c.status = 'approved'
-                    ORDER BY c.id DESC"
+                    ORDER BY c.id DESC
+                    LIMIT ? OFFSET ?"
                 );
+                $stmt -> bindValue(1, $perPage, PDO::PARAM_INT);
+                $stmt -> bindValue(2, $offset, PDO::PARAM_INT);
+                $stmt -> execute();
             }
 
             return $this -> toObjectArray($stmt -> fetchAll(PDO::FETCH_ASSOC));
+        }
+
+        public function countApprovedConfessions(): int
+        {
+            $pdo = Database::connect();
+            return (int) $pdo -> query("SELECT COUNT(*) FROM confessions WHERE status = 'approved'") -> fetchColumn();
         }
 
         // for moderator dashboard, fetches confession on pending status

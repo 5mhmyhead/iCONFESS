@@ -2,23 +2,45 @@
     class AuthController extends Controller
     {
         private AuthService $authService;
+        private ConfessionsService $confessionsService;
         private array $authConfig;
 
         public function __construct()
         {
             $this -> layout = 'index';
             $this -> authService = new AuthService();
+            $this -> confessionsService = new ConfessionsService();
             $this -> authConfig = require __DIR__ . '/../config/auth.php';
         }
 
         public function index()
         {
-            $this -> view('auth/index', ['error' => '']);
+            $totalConfessions = $this -> confessionsService -> getTotalConfessions();
+            $weeklyConfessions = $this -> confessionsService -> getWeeklyConfessions();
+            $accountsLive = $this -> authService -> getAccountsLive();
+
+            $this -> view('auth/index', [
+                'error' => '',
+                'formView' => '../app/views/auth/_login.php',
+                'totalConfessions' => $totalConfessions,
+                'weeklyConfessions' => $weeklyConfessions,
+                'accountsLive' => $accountsLive
+            ]);
         }
 
         public function register()
         {
-            $this -> view('auth/register', ['error' => '']);
+            $totalConfessions = $this -> confessionsService -> getTotalConfessions();
+            $weeklyConfessions = $this -> confessionsService -> getWeeklyConfessions();
+            $accountsLive = $this -> authService -> getAccountsLive();
+
+            $this -> view('auth/index', [
+                'error' => '', 
+                'formView' => '../app/views/auth/_register.php',
+                'totalConfessions' => $totalConfessions,
+                'weeklyConfessions' => $weeklyConfessions,
+                'accountsLive' => $accountsLive
+            ]);
         } 
         
         public function registerUser()

@@ -63,5 +63,15 @@
             $stmt = $pdo -> prepare('INSERT INTO users (username, email, password, role) VALUES (?, ?, ?, ?)');
             return $stmt -> execute([$username, $email, $password, $role]);
         }
+
+        public function getAccountsLive(): int
+        {
+            $pdo = Database::connect();
+
+            $totalStmt = $pdo -> query("SELECT COUNT(*) FROM users");
+            $accountsLive = (int) $totalStmt -> fetchColumn();
+
+            return $accountsLive;
+        }
     }
 ?>

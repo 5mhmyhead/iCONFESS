@@ -14,21 +14,27 @@
             $payload = AuthMiddleware::optionalAuth();
             $userId = $payload ? (int) $payload['sub'] : null;
 
-            $confessions = $this -> confessionsService -> getConfessions($userId);
+            $page = max(1, (int) ($_GET['page'] ?? 1));
+            $perPage = 20;
+
+            $confessions = $this -> confessionsService -> getConfessions($userId, $page, $perPage);
+            $total = $this -> confessionsService -> countConfessions();
+            $totalPages = (int) ceil($total / $perPage);
+
             $totalConfessions = $this -> confessionsService -> getTotalConfessions();
             $weeklyConfessions = $this -> confessionsService -> getWeeklyConfessions();
 
             $this -> view('confessions/index', [
                 'confessions' => $confessions,
                 'totalConfessions' => $totalConfessions,
-                'weeklyConfessions' => $weeklyConfessions
+                'weeklyConfessions' => $weeklyConfessions,
+                'page' => $page,
+                'totalPages' => $totalPages
             ]);
         }
 
         public function filter()
         {
-            $data = json_decode(file_get_contents('php://input'), true);
-            
             $input = $this -> jsonInput();
 
             $category = trim($input['category'] ?? '');

@@ -10,11 +10,16 @@
             $this -> reportModel = new Report();
         }
 
-        public function getConfessions(?int $userId = null): array
+        public function getConfessions(?int $userId = null, int $page = 1, int $perPage = 20): array
         {
-            $confessions = $this -> confessionModel -> getAllConfessions($userId);
+            $confessions = $this -> confessionModel -> getAllConfessions($userId, $page, $perPage);
 
             return $confessions;
+        }
+
+        public function countConfessions(): int
+        {
+            return $this -> confessionModel -> countApprovedConfessions();
         }
 
         public function getConfessionsByTitle(string $keyword): array
@@ -43,19 +48,23 @@
 
         public function submitConfession(int $userId, string $title, string $category, string $campus, string $content): array
         {
-            if ($title === '' || $category === '' || $campus === '' || $content === '') {
+            if ($title === '' || $category === '' || $campus === '' || $content === '') 
+            {
                 return ['success' => false, 'message' => 'All fields are required.'];
             }
 
-            if (!in_array($category, ['Love', 'Academic', 'Drama', 'Miscellaneous'], true)) {
+            if (!in_array($category, ['Love', 'Academic', 'Drama', 'Miscellaneous'], true)) 
+            {
                 return ['success' => false, 'message' => 'Invalid category.'];
             }
 
-            if (!in_array($campus, ['Makati', 'Cebu'], true)) {
+            if (!in_array($campus, ['Makati', 'Cebu'], true)) 
+            {
                 return ['success' => false, 'message' => 'Invalid campus.'];
             }
 
-            if (mb_strlen($title) > 80 || mb_strlen($content) > 500) {
+            if (mb_strlen($title) > 80 || mb_strlen($content) > 500) 
+            {
                 return ['success' => false, 'message' => 'Title or content exceeds allowed length.'];
             }
 
@@ -84,15 +93,18 @@
         {
             $validReasons = ['Spam', 'Harassment', 'Hate Speech', 'Inappropriate Content', 'Other'];
 
-            if (!$confessionId) {
+            if (!$confessionId) 
+            {
                 return ['success' => false, 'message' => 'Invalid confession.'];
             }
 
-            if (!in_array($reason, $validReasons, true)) {
+            if (!in_array($reason, $validReasons, true)) 
+            {
                 return ['success' => false, 'message' => 'Invalid report reason.'];
             }
 
-            if ($reason === 'Other' && $customReason === '') {
+            if ($reason === 'Other' && $customReason === '') 
+            {
                 return ['success' => false, 'message' => 'Please provide details for "Other".'];
             }
 

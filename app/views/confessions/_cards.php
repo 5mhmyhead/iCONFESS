@@ -22,7 +22,9 @@
             <div class="card-header-left">
                 <span class="card-id">#iConfess<?= htmlspecialchars($confession -> getId()) ?></span>
                 <span class="card-campus"><?= htmlspecialchars($confession -> getCampus()) ?></span>
-                <span class="card-category <?= $tagClass ?>"><?= htmlspecialchars($confession -> getCategory()) ?></span>
+                <span class="card-category <?= htmlspecialchars($tagClass) ?>">
+                    <?= htmlspecialchars($confession -> getCategory() === 'Miscellaneous' ? 'Misc' : $confession -> getCategory()) ?>
+                </span>
             </div>
             <span class="card-time"><?= htmlspecialchars($confession -> getFormattedTime()) ?></span>
         </div>

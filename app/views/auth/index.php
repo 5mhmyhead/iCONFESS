@@ -1,40 +1,45 @@
-<div class="form-wrapper">
-    <div class="form-container">
-        <h1 class="form-title">Welcome <span>back!</span></h1>
-        <p class="form-subtitle">Sign in with your school email so that you can post and interact with the confessions feed.</p>
+<?php
+    /** @var int|null $totalConfessions */
+    /** @var int|null $weeklyConfessions */
+    /** @var int|null $accountsLive */
+?>
 
-        <div class="info-banner">
-            <span class="info-icon">!</span>
-            <p>You can check out the confessions feed without an account, but you cannot interact with the feed without logging in.</p>
+<div class="split-layout">
+    <div class="split-left noselect">
+        <div class="logo">
+            <span class="logo-sans">iACADEMY</span><span class="logo-dot">.</span><span class="logo-serif">Confessions</span>
         </div>
 
-        <div id="login-error-alert" style="display: none;"></div>
-
-        <form id="login-form">
-            <div class="form-group">
-                <label for="login-username">username</label>
-                <input type="text" id="login-username" placeholder="enter your username" required>
+        <div class="left-wrapper">
+            <div class="left-content">
+                <h1 class="hero-title">Wake up, get up, <span>get out there.</span></h1>
+                <p class="hero-description">
+                    iACADEMY confessions is an anonymous space for iACADEMY students to share confessions, thoughts, and stories.
+                </p>
             </div>
 
-            <div class="form-group">
-                <label for="login-password">password</label>
-                <input type="password" id="login-password" placeholder="enter your password" required>
-                <div class="forgot-password-wrapper">
-                    <a href="#" class="text-link secondary-link">forgot password?</a>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number"><?= htmlspecialchars($totalConfessions) ?></div>
+                    <div class="stat-label">total confessions</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number"><?= htmlspecialchars($weeklyConfessions) ?></div>
+                    <div class="stat-label">confessions in the last week</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number"><?= htmlspecialchars($accountsLive) ?></div>
+                    <div class="stat-label">accounts live</div>
                 </div>
             </div>
+        </div>
 
-            <button type="submit" class="btn-submit">sign in</button>
+        <div class="left-footer">
+            &copy; <?= date('Y') ?> iACADEMY Confessions. All rights reserved.
+        </div>
+    </div>
 
-            <div class="divider">
-                <span>or</span>
-            </div>
-
-            <a href="?url=confessions" class="btn-browse">browse without signing in</a>
-
-            <p class="form-footer">
-                don't have an account? <a href="?url=auth/register" class="text-link">create one here</a>
-            </p>
-        </form>
+    <div class="split-right">
+        <?php if (isset($formView)) require $formView; ?>
     </div>
 </div>

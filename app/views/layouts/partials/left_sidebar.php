@@ -18,11 +18,4 @@
     <div class="sidebar-link <?= empty($campus) ? 'active' : '' ?>" data-campus="">all campuses</div>
     <div class="sidebar-link <?= $campus === 'Makati' ? 'active' : '' ?>" data-campus="Makati">makati</div>
     <div class="sidebar-link <?= $campus === 'Cebu' ? 'active' : '' ?>" data-campus="Cebu">cebu</div>
-
-    <hr class="sidebar-divider">
-
-    <div class="sidebar-label noselect">SORT BY</div>
-    <div class="sidebar-link <?= empty($sort) ? 'active' : '' ?>" data-sort="recent">recent</div>
-    <div class="sidebar-link <?= $sort === 'hot' ? 'active' : '' ?>" data-sort="hot">hot</div>
-    <div class="sidebar-link <?= $sort === 'top' ? 'active' : '' ?>" data-sort="top">top</div>
 </aside>

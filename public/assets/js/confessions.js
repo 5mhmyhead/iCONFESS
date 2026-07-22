@@ -237,11 +237,13 @@ $(function() {
         $(this).addClass('active');
         reloadFeed();
     });
-    $(document).on('click', '.sidebar-link[data-sort]', function() {
-        $('.sidebar-link[data-sort]').removeClass('active');
+
+    $(document).on('click', '.sort-btn', function() {
+        $('.sort-btn').removeClass('active');
         $(this).addClass('active');
         reloadFeed();
     });
+
     $(document).on('click', '.sidebar-link[data-campus]', function() {
         $('.sidebar-link[data-campus]').removeClass('active');
         $(this).addClass('active');
@@ -257,7 +259,7 @@ $(function() {
     function reloadFeed() {
         const category = $('.sidebar-link[data-category].active').data('category') || '';
         const campus = $('.sidebar-link[data-campus].active').data('campus') || '';
-        const sort = $('.sidebar-link[data-sort].active').data('sort') || 'recent';
+        const sort = $('.sort-btn.active').data('sort') || 'recent';
         const keyword = $('#search-keyword').val().trim();
         const token = localStorage.getItem('jwt_token');
 

@@ -1,6 +1,7 @@
 <?php
     /** @var int|null $totalConfessions */
     /** @var int|null $weeklyConfessions */
+    /** @var string|null $sort */
 ?>
 
 <div class="feed-header">
@@ -16,8 +17,10 @@
     <hr class="feed-divider">
 
     <div class="feed-controls">
-        <div class="filter-tags">
-            <!-- Place your active tag pills here if needed -->
+        <div class="sort-toggle">
+            <div class="sort-btn <?= empty($sort) ? 'active' : '' ?>" data-sort="recent">recent</div>
+            <div class="sort-btn <?= $sort === 'hot' ? 'active' : '' ?>" data-sort="hot">hot</div>
+            <div class="sort-btn <?= $sort === 'top' ? 'active' : '' ?>" data-sort="top">top</div>
         </div>
 
         <div class="view-toggle">

@@ -58,5 +58,10 @@
 
             return ['success' => true, 'user' => $user];
         }
+
+        public function getAccountsLive(): int
+        {
+            return $this -> userModel -> getAccountsLive();
+        }
     }
 ?>
