@@ -20,7 +20,7 @@
                 <label for="login-password">password</label>
                 <input type="password" id="login-password" placeholder="enter your password" required>
                 <div class="forgot-password-wrapper">
-                    <a href="#" class="text-link secondary-link">forgot password?</a>
+                    <a href="?url=auth/forgotPassword" class="text-link secondary-link">forgot password?</a>
                 </div>
             </div>
 

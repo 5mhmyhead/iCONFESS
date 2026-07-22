@@ -113,6 +113,21 @@
             ]);
         }
 
+        public function forgotPassword()
+        {
+            $totalConfessions = $this -> confessionsService -> getTotalConfessions();
+            $weeklyConfessions = $this -> confessionsService -> getWeeklyConfessions();
+            $accountsLive = $this -> authService -> getAccountsLive();
+
+            $this -> view('auth/index', [
+                'error' => '', 
+                'formView' => '../app/views/auth/_forgot_password.php',
+                'totalConfessions' => $totalConfessions,
+                'weeklyConfessions' => $weeklyConfessions,
+                'accountsLive' => $accountsLive
+            ]);
+        }
+
         public function logout()
         {
             session_destroy();
