@@ -1,10 +1,10 @@
 <?php
 return [
-    'host' => 'sandbox.smtp.mailtrap.io',
-    'port' => 2525,
-    'username' => '201630f02d8f90',
-    'password' => '2c5da5d14200ca',
-    'from_email' => 'noreply@iacademy-confessions.test',
+    'host' => 'smtp.gmail.com',
+    'port' => 587,
+    'username' => 'c202401138@iacademy.edu.ph',
+    'password' => 'ebogsnghikgjmunf',
+    'from_email' => 'c202401138@iacademy.edu.ph',
     'from_name' => 'iACADEMY Confessions',
     'app_url' => 'http://localhost/iCONFESS/public/'
 ];

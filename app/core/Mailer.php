@@ -29,11 +29,12 @@
 
                 $mail -> isHTML(true);
                 $mail -> Subject = 'Reset your iACADEMY Confessions password';
-                $mail -> Body = '
-                    <p>Someone requested a password reset for your account.</p>
-                    <p><a href="' . htmlspecialchars($resetLink) . '">Click here to reset your password</a></p>
-                    <p>This link expires in 30 minutes. If you didn\'t request this, you can ignore this email.</p>
-                ';
+                
+                $mail -> Body = (function($resetLink) {
+                    ob_start();
+                    include __DIR__ . '/../views/emails/password_reset.php';
+                    return ob_get_clean();
+                })($resetLink);
 
                 $mail -> send();
                 return true;
