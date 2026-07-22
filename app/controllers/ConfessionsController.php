@@ -13,12 +13,19 @@
         {
             $payload = AuthMiddleware::optionalAuth();
             $userId = $payload ? (int) $payload['sub'] : null;
+            $isLoggedIn = $payload !== null;
 
+            $viewMode = $_COOKIE['confessions_view_mode'] ?? 'list';
+
+            $category = trim($_GET['category'] ?? '');
+            $campus = trim($_GET['campus'] ?? '');
+            $sort = trim($_GET['sort'] ?? 'recent');
+            $keyword = trim($_GET['keyword'] ?? '');
             $page = max(1, (int) ($_GET['page'] ?? 1));
             $perPage = 20;
 
-            $confessions = $this -> confessionsService -> getConfessions($userId, $page, $perPage);
-            $total = $this -> confessionsService -> countConfessions();
+            $confessions = $this -> confessionsService -> getFilteredConfessions($category, $campus, $sort, $keyword, $userId, $page, $perPage);
+            $total = $this -> confessionsService -> countFilteredConfessions($category, $campus, $sort, $keyword);
             $totalPages = (int) ceil($total / $perPage);
 
             $totalConfessions = $this -> confessionsService -> getTotalConfessions();
@@ -29,7 +36,13 @@
                 'totalConfessions' => $totalConfessions,
                 'weeklyConfessions' => $weeklyConfessions,
                 'page' => $page,
-                'totalPages' => $totalPages
+                'totalPages' => $totalPages,
+                'category' => $category,
+                'campus' => $campus,
+                'sort' => $sort,
+                'keyword' => $keyword,
+                'isLoggedIn' => $isLoggedIn,
+                'viewMode' => $viewMode
             ]);
         }
 
@@ -100,6 +113,22 @@
 
             $result = $this -> confessionsService -> submitConfession($userId, $title, $category, $campus, $content);
             $this -> json($result, $result['success'] ? 201 : 422);
+        }
+
+        protected function filterUrl(array $overrides, array $current): string
+        {
+            $params = array_merge([
+                'url' => 'confessions',
+                'category' => $current['category'] ?? '',
+                'campus' => $current['campus'] ?? '',
+                'sort' => $current['sort'] ?? '',
+                'keyword' => $current['keyword'] ?? '',
+                'page' => 1
+            ], $overrides);
+
+            $params = array_filter($params, fn($v) => $v !== '' && $v !== null);
+
+            return '?' . http_build_query($params);
         }
     }
 ?>

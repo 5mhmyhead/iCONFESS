@@ -224,63 +224,11 @@ $(function() {
         .finally(() => { $btn.prop('disabled', false); });
     });
 
-    // sidebar filter and search
-    $(document).on('click', '.rule-header', function() {
-        const body = $(this).closest('.rule-item').find('.rule-body');
-        const caret = $(this).find('.rule-caret');
-        body.toggleClass('open');
-        caret.toggleClass('open');
-    });
-
-    $(document).on('click', '.sidebar-link[data-category]', function() {
-        $('.sidebar-link[data-category]').removeClass('active');
-        $(this).addClass('active');
-        reloadFeed();
-    });
-
-    $(document).on('click', '.sort-btn', function() {
-        $('.sort-btn').removeClass('active');
-        $(this).addClass('active');
-        reloadFeed();
-    });
-
-    $(document).on('click', '.sidebar-link[data-campus]', function() {
-        $('.sidebar-link[data-campus]').removeClass('active');
-        $(this).addClass('active');
-        reloadFeed();
-    });
-
-    let searchTimeout = null;
-    $(document).on('input', '#search-keyword', function() {
-        clearTimeout(searchTimeout);
-        searchTimeout = setTimeout(reloadFeed, 300);
-    });
-
-    function reloadFeed() {
-        const category = $('.sidebar-link[data-category].active').data('category') || '';
-        const campus = $('.sidebar-link[data-campus].active').data('campus') || '';
-        const sort = $('.sort-btn.active').data('sort') || 'recent';
-        const keyword = $('#search-keyword').val().trim();
-        const token = localStorage.getItem('jwt_token');
-
-        fetch(appUrl('confessions/filter'), {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                ...(token ? { 'Authorization': `Bearer ${token}` } : {})
-            },
-            body: JSON.stringify({ category, campus, sort, keyword })
-        })
-        .then(r => r.text())
-        .then(html => {
-            const listContainer = document.querySelector('.confessions-list-inner');
-            if (listContainer) listContainer.innerHTML = html;
-        })
-        .catch(err => console.error('Filter error:', err));
+    // list/grid view toggle
+    function setViewMode(mode) {
+        document.cookie = `confessions_view_mode=${mode}; path=/; max-age=31536000`;
     }
 
-    // list/grid view toggle
     function initViewToggle() {
         const $container = $('.confessions-list-inner');
         const $btnList = $('#btn-list-view');
@@ -288,26 +236,18 @@ $(function() {
 
         if (!$btnList.length || !$btnGrid.length) return;
 
-        // restore saved view mode on load
-        const savedView = localStorage.getItem('confessions_view_mode') || 'list';
-        if (savedView === 'grid') {
-            $container.addClass('grid-view');
-            $btnGrid.addClass('active');
-            $btnList.removeClass('active');
-        }
-
         $(document).on('click', '#btn-list-view', function() {
             $container.removeClass('grid-view');
             $btnList.addClass('active');
             $btnGrid.removeClass('active');
-            localStorage.setItem('confessions_view_mode', 'list');
+            setViewMode('list');
         });
 
         $(document).on('click', '#btn-grid-view', function() {
             $container.addClass('grid-view');
             $btnGrid.addClass('active');
             $btnList.removeClass('active');
-            localStorage.setItem('confessions_view_mode', 'grid');
+            setViewMode('grid');
         });
     }
 

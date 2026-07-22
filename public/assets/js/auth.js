@@ -128,38 +128,10 @@ function initRegisterForm() {
     });
 }
 
-function syncAuthState() {
-    const token = localStorage.getItem('jwt_token');
-    const postBtn = document.getElementById('open-form-btn');
-    const authBtn = document.getElementById('auth-action-btn');
-
-    if (!authBtn) return;
-
-    if (token) {
-        if (postBtn) {
-            postBtn.style.display = 'inline-flex';
-        }
-
-        authBtn.setAttribute('href', '#');
-        authBtn.innerHTML = `
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-                <polyline points="16 17 21 12 16 7"></polyline>
-                <line x1="21" y1="12" x2="9" y2="12"></line>
-            </svg>
-            sign out
-        `;
-
-        authBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            localStorage.removeItem('jwt_token');
-            document.cookie = 'jwt_token=; path=/; max-age=0';
-            window.location.href = appUrl('auth/login');
-        });
-
-    } else {
-        if (postBtn) {
-            postBtn.style.display = 'none';
-        }
-    }
-}
+document.getElementById('auth-action-btn')?.addEventListener('click', function(e) {
+    if (this.dataset.action !== 'logout') return;
+    e.preventDefault();
+    localStorage.removeItem('jwt_token');
+    document.cookie = 'jwt_token=; path=/; max-age=0';
+    window.location.href = appUrl('auth/login');
+});

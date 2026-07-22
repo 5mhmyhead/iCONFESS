@@ -67,46 +67,6 @@
             return $date -> format('M j, Y, g:i A');
         }
 
-        public function getAllConfessions(?int $userId = null, int $page = 1, int $perPage = 20): array
-        {
-            $pdo = Database::connect();
-            $offset = ($page - 1) * $perPage;
-
-            if ($userId) {
-                $stmt = $pdo -> prepare(
-                    "SELECT c.*, (l.user_id IS NOT NULL) AS liked
-                    FROM confessions c
-                    LEFT JOIN confession_likes l ON l.confession_id = c.id AND l.user_id = ?
-                    WHERE c.status = 'approved'
-                    ORDER BY c.id DESC
-                    LIMIT ? OFFSET ?"
-                );
-                $stmt -> bindValue(1, $userId, PDO::PARAM_INT);
-                $stmt -> bindValue(2, $perPage, PDO::PARAM_INT);
-                $stmt -> bindValue(3, $offset, PDO::PARAM_INT);
-                $stmt -> execute();
-            } else {
-                $stmt = $pdo -> prepare(
-                    "SELECT c.*, 0 AS liked
-                    FROM confessions c
-                    WHERE c.status = 'approved'
-                    ORDER BY c.id DESC
-                    LIMIT ? OFFSET ?"
-                );
-                $stmt -> bindValue(1, $perPage, PDO::PARAM_INT);
-                $stmt -> bindValue(2, $offset, PDO::PARAM_INT);
-                $stmt -> execute();
-            }
-
-            return $this -> toObjectArray($stmt -> fetchAll(PDO::FETCH_ASSOC));
-        }
-
-        public function countApprovedConfessions(): int
-        {
-            $pdo = Database::connect();
-            return (int) $pdo -> query("SELECT COUNT(*) FROM confessions WHERE status = 'approved'") -> fetchColumn();
-        }
-
         // for moderator dashboard, fetches confession on pending status
         public function getPendingConfessions(): array
         {
@@ -145,50 +105,113 @@
             return $weeklyConfessions;
         }
 
-        public function getFilteredConfessions(string $category, string $campus, string $sort, string $keyword): array 
-        {
+        public function getFilteredConfessions(
+            string $category,
+            string $campus,
+            string $sort,
+            string $keyword,
+            ?int $userId = null,
+            int $page = 1,
+            int $perPage = 20
+        ): array {
             $pdo = Database::connect();
-            $where = ["status = 'approved'"];
+            $offset = ($page - 1) * $perPage;
+
+            $where = ["c.status = 'approved'"];
             $params = [];
 
-            if($category !== '') 
+            if ($category !== '') 
             {
-                $where[]  = 'category = ?';
+                $where[] = 'c.category = ?';
                 $params[] = $category;
             }
 
-            if($campus !== '') 
+            if ($campus !== '') 
             {
-                $where[]  = 'campus = ?';
+                $where[] = 'c.campus = ?';
                 $params[] = $campus;
             }
 
-            if($keyword !== '') 
+            if ($keyword !== '') 
             {
-                $where[]  = 'title LIKE ?';
+                $where[] = '(c.title LIKE ? OR c.content LIKE ?)';
+                $params[] = '%' . $keyword . '%';
                 $params[] = '%' . $keyword . '%';
             }
 
-            if($sort === 'hot') 
+            if ($sort === 'hot') 
             {
-                $where[]  = 'created_at >= NOW() - INTERVAL 7 DAY';
-                $orderBy  = 'ORDER BY hearts DESC, created_at DESC';
+                $where[] = 'c.created_at >= NOW() - INTERVAL 7 DAY';
+                $orderBy = 'c.hearts DESC, c.created_at DESC';
             } 
-            elseif($sort === 'top') 
+            elseif ($sort === 'top') 
             {
-                $orderBy  = 'ORDER BY hearts DESC';
+                $orderBy = 'c.hearts DESC';
             } 
             else 
             {
-                $orderBy  = 'ORDER BY created_at DESC';
+                $orderBy = 'c.created_at DESC';
             }
 
-            $sql = 'SELECT * FROM confessions WHERE ' . implode(' AND ', $where) . ' ' . $orderBy;
+            $likeSelect = $userId ? '(l.user_id IS NOT NULL) AS liked' : '0 AS liked';
+            $likeJoin = $userId ? 'LEFT JOIN confession_likes l ON l.confession_id = c.id AND l.user_id = ?' : '';
+
+            $sql = "SELECT c.*, $likeSelect FROM confessions c $likeJoin WHERE " . implode(' AND ', $where) . " ORDER BY $orderBy LIMIT ? OFFSET ?";
 
             $stmt = $pdo -> prepare($sql);
-            $stmt -> execute($params);
+
+            $i = 1;
+            if ($userId) 
+            {
+                $stmt -> bindValue($i++, $userId, PDO::PARAM_INT);
+            }
+
+            foreach ($params as $param) 
+            {
+                $stmt -> bindValue($i++, $param, PDO::PARAM_STR);
+            }
+
+            $stmt -> bindValue($i++, $perPage, PDO::PARAM_INT);
+            $stmt -> bindValue($i++, $offset, PDO::PARAM_INT);
+            $stmt -> execute();
 
             return $this -> toObjectArray($stmt -> fetchAll(PDO::FETCH_ASSOC));
+        }
+
+        public function countFilteredConfessions(string $category, string $campus, string $sort, string $keyword): int
+        {
+            $pdo = Database::connect();
+
+            $where = ["status = 'approved'"];
+            $params = [];
+
+            if ($category !== '') 
+            { 
+                $where[] = 'category = ?'; $params[] = $category; 
+            }
+            
+            
+            if ($campus !== '') 
+            { 
+                $where[] = 'campus = ?'; $params[] = $campus; 
+            }
+            
+            
+            if ($keyword !== '') 
+            { 
+                $where[] = '(title LIKE ? OR content LIKE ?)'; $params[] = "%$keyword%"; $params[] = "%$keyword%"; 
+            }
+            
+            
+            if ($sort === 'hot') 
+            { 
+                $where[] = 'created_at >= NOW() - INTERVAL 7 DAY'; 
+            }
+
+            $stmt = $pdo -> prepare('SELECT COUNT(*) FROM confessions WHERE ' . implode(' AND ', $where));
+            $stmt -> execute($params);
+
+            return (int) $stmt -> fetchColumn();
         }
 
         public function createConfession(int $userId, string $title, string $category, string $campus, string $content): int
