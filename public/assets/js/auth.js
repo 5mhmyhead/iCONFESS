@@ -128,38 +128,67 @@ function initRegisterForm() {
     });
 }
 
-function syncAuthState() {
-    const token = localStorage.getItem('jwt_token');
-    const postBtn = document.getElementById('open-form-btn');
-    const authBtn = document.getElementById('auth-action-btn');
+document.getElementById('auth-action-btn')?.addEventListener('click', function(e) {
+    if (this.dataset.action !== 'logout') return;
+    e.preventDefault();
+    localStorage.removeItem('jwt_token');
+    document.cookie = 'jwt_token=; path=/; max-age=0';
+    window.location.href = appUrl('auth/login');
+});
 
-    if (!authBtn) return;
+document.getElementById('forgot-form')?.addEventListener('submit', function (e) {
+    e.preventDefault();
+    const submitBtn = this.querySelector('button[type="submit"]');
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Sending...';
 
-    if (token) {
-        if (postBtn) {
-            postBtn.style.display = 'inline-flex';
-        }
+    const errorAlert = document.getElementById('forgot-error-alert');
+    const successAlert = document.getElementById('forgot-success-alert');
+    hideAlert(errorAlert);
+    hideAlert(successAlert);
 
-        authBtn.setAttribute('href', '#');
-        authBtn.innerHTML = `
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-                <polyline points="16 17 21 12 16 7"></polyline>
-                <line x1="21" y1="12" x2="9" y2="12"></line>
-            </svg>
-            sign out
-        `;
+    const email = document.getElementById('forgot-email').value;
 
-        authBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            localStorage.removeItem('jwt_token');
-            document.cookie = 'jwt_token=; path=/; max-age=0';
-            window.location.href = appUrl('auth/login');
+    postJson('auth/sendPasswordReset', { email })
+        .then(res => {
+            if (res.body.success) {
+                showAlert(successAlert, res.body.message);
+            } else {
+                showAlert(errorAlert, res.body.message || 'Something went wrong.');
+            }
+        })
+        .catch(() => showAlert(errorAlert, 'An unexpected error occurred.'))
+        .finally(() => {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'send reset link';
         });
+});
 
-    } else {
-        if (postBtn) {
-            postBtn.style.display = 'none';
-        }
+document.getElementById('reset-form')?.addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    const errorAlert = document.getElementById('reset-error-alert');
+    const successAlert = document.getElementById('reset-success-alert');
+    hideAlert(errorAlert);
+    hideAlert(successAlert);
+
+    const token = document.querySelector('input[name="token"]').value;
+    const password = document.getElementById('reset-password').value;
+    const confirmPassword = document.getElementById('reset-password-confirm').value;
+
+    if (password !== confirmPassword) {
+        showAlert(errorAlert, 'Passwords do not match.');
+        return;
     }
-}
+
+    postJson('auth/resetPassword', { token, password, confirmPassword })
+        .then(res => {
+            if (res.body.success) {
+                showAlert(successAlert, 'Password updated! Redirecting to login...');
+                setTimeout(() => window.location.href = appUrl('auth/login'), 1500);
+            } else {
+                showAlert(errorAlert, res.body.message || 'Reset failed.');
+            }
+        })
+        .catch(() => showAlert(errorAlert, 'An unexpected error occurred.'));
+});

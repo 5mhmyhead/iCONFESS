@@ -24,15 +24,3 @@ window.addEventListener('load', function () {
         }, 200); 
     }
 });
-
-document.addEventListener("DOMContentLoaded", function() {
-    const searchInput = document.getElementById('search-keyword');
-
-    if (searchInput) {
-        searchInput.addEventListener('keydown', function(event) {
-            if (event.key === 'Enter') {
-                event.preventDefault(); 
-            }
-        });
-    }
-});

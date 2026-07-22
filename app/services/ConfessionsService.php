@@ -10,28 +10,19 @@
             $this -> reportModel = new Report();
         }
 
-        public function getConfessions(?int $userId = null, int $page = 1, int $perPage = 20): array
+        public function getFilteredConfessions(string $category, string $campus, string $sort, string $keyword, ?int $userId = null, int $page = 1, int $perPage = 20): array
         {
-            $confessions = $this -> confessionModel -> getAllConfessions($userId, $page, $perPage);
-
-            return $confessions;
+            return $this -> confessionModel -> getFilteredConfessions($category, $campus, $sort, $keyword, $userId, $page, $perPage);
         }
 
-        public function countConfessions(): int
+        public function countFilteredConfessions(string $category, string $campus, string $sort, string $keyword): int
         {
-            return $this -> confessionModel -> countApprovedConfessions();
+            return $this -> confessionModel -> countFilteredConfessions($category, $campus, $sort, $keyword);
         }
 
         public function getConfessionsByTitle(string $keyword): array
         {
             $confessions = $this -> confessionModel -> getConfessionsByTitle($keyword);
-
-            return $confessions;
-        }
-
-        public function getFilteredConfessions(string $category, string $campus, string $sort, string $keyword): array 
-        {
-            $confessions = $this -> confessionModel -> getFilteredConfessions($category, $campus, $sort, $keyword);
 
             return $confessions;
         }

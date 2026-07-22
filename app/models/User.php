@@ -64,6 +64,28 @@
             return $stmt -> execute([$username, $email, $password, $role]);
         }
 
+        public static function findByEmail(string $email): ?User
+        {
+            $pdo = Database::connect();
+            $stmt = $pdo -> prepare('SELECT * FROM users WHERE email = ?');
+            $stmt -> execute([$email]);
+            $row = $stmt -> fetch(PDO::FETCH_ASSOC);
+
+            if ($row) 
+            {
+                return new User($row['id'], $row['username'], $row['email'], $row['password'], $row['role']);
+            }
+
+            return null;
+        }
+
+        public function updatePassword(int $userId, string $hashedPassword): bool
+        {
+            $pdo = Database::connect();
+            $stmt = $pdo -> prepare('UPDATE users SET password = ? WHERE id = ?');
+            return $stmt -> execute([$hashedPassword, $userId]);
+        }
+
         public function getAccountsLive(): int
         {
             $pdo = Database::connect();
