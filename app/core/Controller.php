@@ -20,6 +20,24 @@
             require_once '../app/views/' . $view . '.php';
         }
 
+        public function renderError(int $statusCode, string $message)
+        {
+            http_response_code($statusCode);
+            $errorCode = $statusCode;
+            $errorMessage = $message;
+
+            $viewPath = '../app/views/layouts/error.php';
+
+            if (file_exists($viewPath)) 
+            {
+                require $viewPath;
+            } 
+            else 
+            {
+                echo $statusCode . ' - ' . htmlspecialchars($message);
+            }
+        }
+
         protected function jsonInput(): array
         {
             $raw = file_get_contents('php://input');

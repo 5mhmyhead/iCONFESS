@@ -12,15 +12,14 @@
         {
             if(!isset($this -> routes[$url]))
             {
-                http_response_code(404);
-                $this -> render404("The page you're looking for doesn't exist or has been moved.");
+                $this -> renderError(404, "The page you're looking for doesn't exist or has been moved.");
                 return;
             }
 
             [$controllerClass, $method] = $this -> routes[$url];
 
             if (!class_exists($controllerClass)) {
-                $this -> render404("Controller class direct access error.");
+                $this -> renderError(500, "Controller class direct access error.");
                 return;
             }
 
@@ -28,19 +27,20 @@
 
             if(!method_exists($controller, $method))
             {
-                $this -> render404("Action method not found.");
+                $this -> renderError(500, "Action method not found.");
                 return;
             }
 
             $controller -> $method();
         }
 
-        private function render404(string $message)
+        private function renderError(int $statusCode, string $message)
         {
-            http_response_code(404);
+            http_response_code($statusCode);
+            $errorCode = $statusCode;
             $errorMessage = $message;
 
-            $viewPath = '../app//views/layouts/404.php';
+            $viewPath = '../app/views/layouts/error.php';
 
             if (file_exists($viewPath)) 
             {
@@ -48,7 +48,7 @@
             } 
             else 
             {
-                echo '404 Page Not Found';
+                echo $statusCode . ' - ' . htmlspecialchars($message);
             }
         }
     }

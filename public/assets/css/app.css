@@ -1,8 +1,10 @@
 @import 'style.css';
-@import '404.css';
+@import 'error.css';
 @import 'partials/header.css';
 @import 'partials/left_sidebar.css';
 @import 'partials/right_sidebar.css';
 @import 'partials/feed.css';
 @import 'partials/auth.css';
 @import 'partials/form.css';
+@import 'partials/metrics.css';
+@import 'partials/moderator.css';

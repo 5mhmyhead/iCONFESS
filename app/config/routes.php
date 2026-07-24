@@ -7,6 +7,8 @@
         'confessions/report' => [ConfessionsController::class, 'report'],
         'heart' => [ConfessionsController::class, 'heart'],
 
+        'moderator/panel' => [ModeratorController::class, 'index'],
+
         'auth/login' => [AuthController::class, 'index'],
         'auth/loginUser' => [AuthController::class, 'loginUser'],
         'auth/register' => [AuthController::class, 'register'],

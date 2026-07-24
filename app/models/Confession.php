@@ -259,6 +259,36 @@
             return (int) $check -> fetchColumn();
         }
 
+        // helper functions for metrics
+        public function countAllConfessions(): int
+        {
+            $pdo = Database::connect();
+            return (int) $pdo -> query("SELECT COUNT(*) FROM confessions") -> fetchColumn();
+        }
+
+        public function countConfessionsToday(): int
+        {
+            $pdo = Database::connect();
+            return (int) $pdo -> query("SELECT COUNT(*) FROM confessions WHERE DATE(created_at) = CURDATE()") -> fetchColumn();
+        }
+
+        public function countByStatus(string $status): int
+        {
+            $pdo = Database::connect();
+            $stmt = $pdo -> prepare("SELECT COUNT(*) FROM confessions WHERE status = ?");
+            $stmt -> execute([$status]);
+            return (int) $stmt -> fetchColumn();
+        }
+
+        public function countFlaggedConfessions(): int
+        {
+            // "flagged" = confessions with at least one pending report against them
+            $pdo = Database::connect();
+            return (int) $pdo -> query(
+                "SELECT COUNT(DISTINCT confession_id) FROM reports WHERE status = 'pending'"
+            ) -> fetchColumn();
+        }
+
         // helper function that converts raw associative row to an object array
         private function toObjectArray(array $rows): array
         {

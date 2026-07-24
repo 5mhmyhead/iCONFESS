@@ -3,6 +3,14 @@ $(function() {
         return '?url=' + path;
     };
 
+    // sidebar dropdown                       
+    $(document).on('click', '.rule-header', function() {
+        const body = $(this).closest('.rule-item').find('.rule-body');
+        const caret = $(this).find('.rule-caret');
+        body.toggleClass('open');
+        caret.toggleClass('open');
+    });
+
     // shared alert
     function showAlert(message) {
         document.getElementById('alert-modal-message').textContent = message;

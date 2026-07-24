@@ -26,6 +26,7 @@
             return self::encode([
                 'sub' => (int) $user -> getId(),
                 'username' => $user -> getUsername(),
+                'role' => $user -> getRole(),
             ], $secret, $ttl);
         }
 

@@ -95,5 +95,19 @@
 
             return $accountsLive;
         }
+
+        public static function countAllUsers(): int
+        {
+            $pdo = Database::connect();
+            return (int) $pdo -> query("SELECT COUNT(*) FROM users") -> fetchColumn();
+        }
+
+        public static function countUsersThisWeek(): int
+        {
+            $pdo = Database::connect();
+            return (int) $pdo -> query(
+                "SELECT COUNT(*) FROM users WHERE created_at >= NOW() - INTERVAL 7 DAY"
+            ) -> fetchColumn();
+        }
     }
 ?>

@@ -4,19 +4,24 @@
         public static function requireAuth()
         {
             $config = require __DIR__ . '/../config/auth.php';
+
+            $token = null;
             $header = self::authorizationHeader();
 
-            if(substr($header, 0, 7) !== 'Bearer ') 
-            {
+            if (substr($header, 0, 7) === 'Bearer ') {
+                $token = trim(substr($header, 7));
+            } elseif (!empty($_COOKIE['jwt_token'])) {
+                $token = $_COOKIE['jwt_token'];
+            }
+
+            if (!$token) {
                 self::json(['message' => 'Bearer token required'], 401);
                 exit;
             }
 
-            $token = trim(substr($header, 7));
             $payload = Jwt::verify($token, $config['jwt_secret']);
 
-            if(!$payload) 
-            {
+            if (!$payload) {
                 self::json(['message' => 'Invalid or expired token'], 401);
                 exit;
             }
