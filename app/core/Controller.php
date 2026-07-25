@@ -38,6 +38,23 @@
             }
         }
 
+        protected function filterUrl(array $overrides, array $current, string $baseUrl = 'confessions'): string
+        {
+            $params = array_merge([
+                'url' => $baseUrl,
+                'category' => $current['category'] ?? '',
+                'campus' => $current['campus'] ?? '',
+                'sort' => $current['sort'] ?? '',
+                'status' => $current['status'] ?? '',
+                'keyword' => $current['keyword'] ?? '',
+                'page' => 1
+            ], $overrides);
+
+            $params = array_filter($params, fn($v) => $v !== '' && $v !== null);
+
+            return '?' . http_build_query($params);
+        }
+
         protected function jsonInput(): array
         {
             $raw = file_get_contents('php://input');

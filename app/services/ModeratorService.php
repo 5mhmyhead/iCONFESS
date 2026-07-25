@@ -21,4 +21,14 @@ class ModeratorService
             'newUsersThisWeek' => $this -> userModel -> countUsersThisWeek()
         ];
     }
+
+    public function getQueue(string $status, string $category, string $campus, string $keyword, int $page = 1, int $perPage = 20): array
+    {
+        return $this -> confessionModel -> getModerationQueue($status, $category, $campus, $keyword, $page, $perPage);
+    }
+
+    public function countQueue(string $status, string $category, string $campus, string $keyword): int
+    {
+        return $this -> confessionModel -> countModerationQueue($status, $category, $campus, $keyword);
+    }
 }

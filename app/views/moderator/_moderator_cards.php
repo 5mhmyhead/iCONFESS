@@ -1,5 +1,6 @@
 <?php 
-    /** @var Confession[] $confessions */ 
+    /** @var Confession[] $confessions */
+    /** @var string $status */
 
     $tagClasses = [
         'Love' => 'card-tag-love', 
@@ -31,27 +32,42 @@
 
         <p class="card-title"><?= htmlspecialchars($confession -> getTitle()) ?></p>
         <p class="card-content"><?= htmlspecialchars($confession -> getContent()) ?></p>
-        
-        <hr class="card-divider">
+
+        <hr class="card-divider">   
+
+        <?php if ($status === 'flagged'): ?>
+            <div class="report-details">
+                <?php foreach ($confession -> getReports() as $report): ?>
+                    <div class="report-entry">
+                        <span class="report-reason-tag"><?= htmlspecialchars($report['reason']) ?></span>
+                        <?php if (!empty($report['custom_reason'])): ?>
+                            <p class="report-custom-text"><?= htmlspecialchars($report['custom_reason']) ?></p>
+                        <?php endif; ?>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
 
         <div class="card-footer">
-            <button type="button" class="heart-btn" data-id="<?= (int)$confession -> getId() ?>" data-liked="<?= $confession -> isLiked() ? 'true' : 'false' ?>">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#9896a8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l8.84 8.84 8.84-8.84a5.5 5.5 0 0 0 0-7.78z"/>
-                </svg>
-                <span><?= (int) $confession->getHearts() ?> hearts</span>
-            </button>
-            
-            <div class="mod-action-buttons">
-                <button type="button" class="mod-btn-reject" data-id="<?= (int)$confession -> getId() ?>">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                    reject
-                </button>
-                <button type="button" class="mod-btn-approve" data-id="<?= (int)$confession -> getId() ?>">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                    approve
-                </button>
-            </div>
+            <?php if ($status === 'pending' || $status === 'flagged'): ?>
+                <div class="mod-action-buttons">
+                    <button type="button" class="mod-btn-reject" data-id="<?= (int)$confession -> getId() ?>">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                        reject
+                    </button>
+                    <button type="button" class="mod-btn-approve" data-id="<?= (int)$confession -> getId() ?>">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        approve
+                    </button>
+                </div>
+            <?php elseif ($status === 'approved' || $status === 'rejected'): ?>
+                <div class="mod-action-buttons">
+                    <button type="button" class="mod-btn-return" data-id="<?= (int)$confession -> getId() ?>">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
+                        return to queue
+                    </button>
+                </div>
+            <?php endif; ?>
         </div>
     </div>
 <?php endforeach; ?>

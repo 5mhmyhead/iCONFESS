@@ -1,5 +1,6 @@
 <?php
     /** @var bool|null $isLoggedIn */
+    /** @var bool|null $isModerator */
 ?>
 
 <header>
@@ -28,6 +29,15 @@
     </form>
     <div class="btn-actions">
         <?php if ($isLoggedIn): ?>
+            <?php if ($isModerator): ?>
+                <a href="?url=moderator/panel" class="btn btn-secondary">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    </svg>
+                    moderator panel
+                </a>
+            <?php endif; ?>
+
             <button id="open-form-btn" class="btn btn-primary">
                 <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M12 5v14M5 12h14"/>

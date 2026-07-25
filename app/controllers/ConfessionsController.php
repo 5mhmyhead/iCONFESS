@@ -14,6 +14,7 @@
             $payload = AuthMiddleware::optionalAuth();
             $userId = $payload ? (int) $payload['sub'] : null;
             $isLoggedIn = $payload !== null;
+            $isModerator = $isLoggedIn && in_array($payload['role'] ?? '', ['moderator', 'admin'], true);
 
             $viewMode = $_COOKIE['confessions_view_mode'] ?? 'list';
 
@@ -42,6 +43,7 @@
                 'sort' => $sort,
                 'keyword' => $keyword,
                 'isLoggedIn' => $isLoggedIn,
+                'isModerator' => $isModerator,
                 'viewMode' => $viewMode
             ]);
         }
@@ -113,22 +115,6 @@
 
             $result = $this -> confessionsService -> submitConfession($userId, $title, $category, $campus, $content);
             $this -> json($result, $result['success'] ? 201 : 422);
-        }
-
-        protected function filterUrl(array $overrides, array $current): string
-        {
-            $params = array_merge([
-                'url' => 'confessions',
-                'category' => $current['category'] ?? '',
-                'campus' => $current['campus'] ?? '',
-                'sort' => $current['sort'] ?? '',
-                'keyword' => $current['keyword'] ?? '',
-                'page' => 1
-            ], $overrides);
-
-            $params = array_filter($params, fn($v) => $v !== '' && $v !== null);
-
-            return '?' . http_build_query($params);
         }
     }
 ?>

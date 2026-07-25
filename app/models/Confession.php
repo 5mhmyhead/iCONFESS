@@ -10,6 +10,7 @@
         private string $status;
         private ?string $createdAt;
         private bool $liked;
+        private array $reports = [];
 
         public function __construct(
             $id = null, 
@@ -56,6 +57,9 @@
 
         public function getCreatedAt(): ?string { return $this -> createdAt; }
         public function setCreatedAt(string $createdAt) { $this -> createdAt = $createdAt; }
+
+        public function setReports(array $reports): void { $this -> reports = $reports; }
+        public function getReports(): array { return $this -> reports; }
 
         public function isLiked(): bool { return $this -> liked; }
         public function getFormattedTime(): string
@@ -209,6 +213,92 @@
             }
 
             $stmt = $pdo -> prepare('SELECT COUNT(*) FROM confessions WHERE ' . implode(' AND ', $where));
+            $stmt -> execute($params);
+
+            return (int) $stmt -> fetchColumn();
+        }
+
+        public function getModerationQueue(string $status, string $category, string $campus, string $keyword, int $page = 1, int $perPage = 20): array
+        {
+            $pdo = Database::connect();
+            $offset = ($page - 1) * $perPage;
+
+            $where = [];
+            $params = [];
+
+            if ($status === 'flagged') {
+                $where[] = "EXISTS (SELECT 1 FROM reports r WHERE r.confession_id = c.id AND r.status = 'pending')";
+            } else {
+                $validStatuses = ['pending', 'approved', 'rejected'];
+                $where[] = 'c.status = ?';
+                $params[] = in_array($status, $validStatuses, true) ? $status : 'pending';
+            }
+
+            if ($category !== '') { $where[] = 'c.category = ?'; $params[] = $category; }
+            if ($campus !== '') { $where[] = 'c.campus = ?'; $params[] = $campus; }
+            if ($keyword !== '') { $where[] = '(c.title LIKE ? OR c.content LIKE ?)'; $params[] = "%$keyword%"; $params[] = "%$keyword%"; }
+
+            $whereSql = $where ? 'WHERE ' . implode(' AND ', $where) : '';
+
+            $sql = "SELECT c.* FROM confessions c $whereSql ORDER BY c.id ASC LIMIT ? OFFSET ?";
+
+            $stmt = $pdo -> prepare($sql);
+            $i = 1;
+            foreach ($params as $param) { $stmt -> bindValue($i++, $param, PDO::PARAM_STR); }
+            $stmt -> bindValue($i++, $perPage, PDO::PARAM_INT);
+            $stmt -> bindValue($i++, $offset, PDO::PARAM_INT);
+            $stmt -> execute();
+
+            $confessions = $this -> toObjectArray($stmt -> fetchAll(PDO::FETCH_ASSOC));
+
+            // for the flagged tab, attach each confession's pending reports
+            if ($status === 'flagged' && $confessions) {
+                $ids = array_map(fn($c) => $c -> getId(), $confessions);
+                $placeholders = implode(',', array_fill(0, count($ids), '?'));
+
+                $reportStmt = $pdo -> prepare(
+                    "SELECT * FROM reports WHERE confession_id IN ($placeholders) AND status = 'pending' ORDER BY created_at ASC"
+                );
+                $reportStmt -> execute($ids);
+                $allReports = $reportStmt -> fetchAll(PDO::FETCH_ASSOC);
+
+                // group reports by id
+                $reportsByConfession = [];
+                foreach ($allReports as $r) {
+                    $reportsByConfession[$r['confession_id']][] = $r;
+                }
+
+                foreach ($confessions as $confession) {
+                    $confession -> setReports($reportsByConfession[$confession -> getId()] ?? []);
+                }
+            }
+
+            return $confessions;
+        }
+
+        public function countModerationQueue(string $status, string $category, string $campus, string $keyword): int
+        {
+            $pdo = Database::connect();
+
+            $where = [];
+            $params = [];
+            $joinReports = '';
+
+            if ($status === 'flagged') {
+                $joinReports = "INNER JOIN (SELECT DISTINCT confession_id FROM reports WHERE status = 'pending') r ON r.confession_id = c.id";
+            } else {
+                $validStatuses = ['pending', 'approved', 'rejected'];
+                $where[] = 'c.status = ?';
+                $params[] = in_array($status, $validStatuses, true) ? $status : 'pending';
+            }
+
+            if ($category !== '') { $where[] = 'c.category = ?'; $params[] = $category; }
+            if ($keyword !== '') { $where[] = '(c.title LIKE ? OR c.content LIKE ?)'; $params[] = "%$keyword%"; $params[] = "%$keyword%"; }
+            if ($campus !== '') { $where[] = 'c.campus = ?'; $params[] = $campus; }
+
+            $whereSql = $where ? 'WHERE ' . implode(' AND ', $where) : '';
+
+            $stmt = $pdo -> prepare("SELECT COUNT(*) FROM confessions c $joinReports $whereSql");
             $stmt -> execute($params);
 
             return (int) $stmt -> fetchColumn();

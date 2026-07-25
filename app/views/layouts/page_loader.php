@@ -1,10 +1,16 @@
 <?php
-    $referrer = $_SERVER['HTTP_REFERER'] ?? '';
-    $cameFromFeed = strpos($referrer, 'url=confessions') !== false;
-    $isFeedPage = ($view ?? '') === 'confessions/index';
+    $referrer = urldecode($_SERVER['HTTP_REFERER'] ?? '');
+    $view = $view ?? '';
 
-    $skipLoader = $isFeedPage && $cameFromFeed;
+    $isFeedPage = $view === 'confessions/index';
+    $isModeratorPage = $view === 'moderator/index';
+
+    $cameFromFeed = strpos($referrer, 'url=confessions') !== false;
+    $cameFromModerator = strpos($referrer, 'url=moderator/panel') !== false;
+
+    $skipLoader = ($isFeedPage && $cameFromFeed) || ($isModeratorPage && $cameFromModerator);
 ?>
+
 
 <?php if (!$skipLoader): ?>
     <div id="page-loader" class="page-loader">
