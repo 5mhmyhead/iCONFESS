@@ -10,13 +10,13 @@
     $current = compact('category', 'campus', 'sort', 'keyword');
 ?>
 
-<?php include '../app/views/layouts/partials/header.php'; ?>
+<?php include '../app/views/confessions/_confessions_header.php'; ?>
 
 <div class="feed-content">
-    <?php include '../app/views/layouts/partials/left_sidebar.php'; ?>
+    <?php include '../app/views/confessions/_left_sidebar.php'; ?>
 
     <section class="confessions-list">
-        <?php require '../app/views/layouts/partials/feed_header.php'; ?>
+        <?php require '../app/views/confessions/_feed_header.php'; ?>
         
         <div class="confessions-list-inner <?= $viewMode === 'grid' ? 'grid-view' : '' ?>">
             <?php require '../app/views/confessions/_cards.php'; ?>
@@ -35,8 +35,8 @@
         </div>
     </section>
 
-    <?php include '../app/views/layouts/partials/right_sidebar.php'; ?>
-    <?php include '../app/views/layouts/partials/submission_form.php'; ?>
-    <?php include '../app/views/layouts/partials/report_form.php'; ?>
-    <?php include '../app/views/layouts/partials/alert.php'; ?>
+    <?php include '../app/views/confessions/_right_sidebar.php'; ?>
+    <?php include '../app/views/confessions/_submission_form.php'; ?>
+    <?php include '../app/views/confessions/_report_form.php'; ?>
+    <?php include '../app/views/layouts/alert.php'; ?>
 </div>
