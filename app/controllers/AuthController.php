@@ -59,7 +59,7 @@
             $modSecret = $input['mod_secret'] ?? '';
 
             // passcode required to register as moderator
-            $expectedModSecret = $this -> authConfig['mod_secret'] ?? 'studyhard2026';
+            $expectedModSecret = $this -> authConfig['mod_secret'];
 
             if ($role === 'moderator') 
             {

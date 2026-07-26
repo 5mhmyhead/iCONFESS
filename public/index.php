@@ -28,5 +28,5 @@
     $routes = require_once __DIR__ . '/../app/config/routes.php';
 
     $router = new Router($routes);
-    $router -> route($_GET['url'] ?: 'auth/login');
+    $router -> route($_GET['url'] ?? 'auth/login');
 ?>
