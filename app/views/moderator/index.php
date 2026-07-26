@@ -60,3 +60,6 @@
         <a href="<?= $this -> filterUrl(['page' => $page + 1], $current, 'moderator/panel') ?>">Next &raquo;</a>
     <?php endif; ?>
 </div>
+
+<?php include '../app/views/moderator/_reject_form.php'; ?>
+<?php include '../app/views/layouts/alert.php'; ?>

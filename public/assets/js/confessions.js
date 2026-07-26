@@ -267,4 +267,8 @@ $(function() {
         const subject = encodeURIComponent("iACADEMY Confessions Moderator Inquiry");
         window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=${email}&su=${subject}`, '_blank', 'noopener,noreferrer');
     });
+
+    document.getElementById('close-rejection-notice-btn')?.addEventListener('click', () => {
+        document.getElementById('rejection-notice-modal').style.display = 'none';
+    });
 });

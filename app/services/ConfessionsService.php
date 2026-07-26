@@ -37,6 +37,16 @@
             return $this -> confessionModel -> getWeeklyConfessions();
         }
 
+        public function getUnseenRejections(int $userId): array 
+        { 
+            return $this -> confessionModel -> getUnseenRejections($userId); 
+        }
+
+        public function markRejectionsSeen(int $userId): bool 
+        { 
+            return $this -> confessionModel -> markRejectionsSeen($userId); 
+        }
+
         public function submitConfession(int $userId, string $title, string $category, string $campus, string $content): array
         {
             if ($title === '' || $category === '' || $campus === '' || $content === '') 

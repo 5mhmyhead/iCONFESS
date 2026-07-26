@@ -28,7 +28,7 @@
 
             return $payload;
         }
-
+        
         // auth check that doesn't exit on failure
         // confession feed will still be visible regardless if there is a token
         public static function optionalAuth(): ?array

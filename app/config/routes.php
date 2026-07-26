@@ -8,7 +8,11 @@
         'heart' => [ConfessionsController::class, 'heart'],
 
         'moderator/panel' => [ModeratorController::class, 'index'],
+        'moderator/approve' => [ModeratorController::class, 'approve'],
+        'moderator/reject' => [ModeratorController::class, 'reject'],
+        'moderator/returnToQueue' => [ModeratorController::class, 'returnToQueue'],
 
+        '' => [AuthController::class, 'index'],
         'auth/login' => [AuthController::class, 'index'],
         'auth/loginUser' => [AuthController::class, 'loginUser'],
         'auth/register' => [AuthController::class, 'register'],

@@ -19,5 +19,6 @@
     <script src="assets/js/util.js"></script>
     <script src="assets/js/auth.js"></script>
     <script src="assets/js/confessions.js"></script>
+    <script src="assets/js/moderator.js"></script>
 </body>
 </html>

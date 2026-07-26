@@ -8,9 +8,12 @@
     $cameFromFeed = strpos($referrer, 'url=confessions') !== false;
     $cameFromModerator = strpos($referrer, 'url=moderator/panel') !== false;
 
-    $skipLoader = ($isFeedPage && $cameFromFeed) || ($isModeratorPage && $cameFromModerator);
-?>
+    $actionJustHappened = isset($_GET['actionDone']);
 
+    $skipLoader = !$actionJustHappened && (
+        ($isFeedPage && $cameFromFeed) || ($isModeratorPage && $cameFromModerator)
+    );
+?>
 
 <?php if (!$skipLoader): ?>
     <div id="page-loader" class="page-loader">

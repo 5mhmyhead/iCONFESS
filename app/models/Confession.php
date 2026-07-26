@@ -11,6 +11,7 @@
         private ?string $createdAt;
         private bool $liked;
         private array $reports = [];
+        private ?string $rejectionReason;
 
         public function __construct(
             $id = null, 
@@ -21,7 +22,8 @@
             $hearts = 0, 
             $status = 'pending', 
             $createdAt = null,
-            $liked = false
+            $liked = false,
+            $rejectionReason = null
         ) {
             $this -> id = $id;
             $this -> title = $title;
@@ -32,6 +34,7 @@
             $this -> status = $status;
             $this -> createdAt = $createdAt;
             $this -> liked = $liked;
+            $this -> rejectionReason = $rejectionReason;
         }
 
         public function getId(): ?int { return $this -> id; }
@@ -62,6 +65,8 @@
         public function getReports(): array { return $this -> reports; }
 
         public function isLiked(): bool { return $this -> liked; }
+        public function getRejectionReason(): ?string { return $this -> rejectionReason; }
+
         public function getFormattedTime(): string
         {
             if ($this -> createdAt === null) return 'Just now';
@@ -310,10 +315,9 @@
 
             $stmt = $pdo -> prepare(
                 "INSERT INTO confessions (user_id, title, content, category, campus, status)
-                VALUES (?, ?, ?, ?, ?, 'approved')"
+                VALUES (?, ?, ?, ?, ?, 'pending')"
             );
-            // status set to approved for now for testing
-            // swap to pending when moderator is wired
+
             $stmt -> execute([$userId, $title, $content, $category, $campus]);
 
             return (int) $pdo -> lastInsertId();
@@ -372,11 +376,67 @@
 
         public function countFlaggedConfessions(): int
         {
-            // "flagged" = confessions with at least one pending report against them
+            // flagged confessions with at least one pending report against them
             $pdo = Database::connect();
             return (int) $pdo -> query(
                 "SELECT COUNT(DISTINCT confession_id) FROM reports WHERE status = 'pending'"
             ) -> fetchColumn();
+        }
+
+        // moderator actions
+        public function approveConfession(int $id): bool
+        {
+            $pdo = Database::connect();
+
+            $pdo -> prepare("UPDATE confessions SET status = 'approved' WHERE id = ?") -> execute([$id]);
+            // resolve any pending reports against it
+            $pdo -> prepare("UPDATE reports SET status = 'reviewed' WHERE confession_id = ? AND status = 'pending'") -> execute([$id]);
+
+            return true;
+        }
+
+        public function rejectConfession(int $id, string $reason): bool
+        {
+            $pdo = Database::connect();
+
+            $stmt = $pdo -> prepare(
+                "UPDATE confessions SET status = 'rejected', rejection_reason = ?, rejection_seen = FALSE WHERE id = ?"
+            );
+            $stmt -> execute([$reason, $id]);
+
+            $pdo -> prepare("UPDATE reports SET status = 'reviewed' WHERE confession_id = ? AND status = 'pending'") -> execute([$id]);
+
+            return true;
+        }
+
+        public function returnToQueue(int $id): bool
+        {
+            $pdo = Database::connect();
+
+            $stmt = $pdo -> prepare(
+                "UPDATE confessions SET status = 'pending', rejection_reason = NULL, rejection_seen = FALSE WHERE id = ?"
+            );
+            return $stmt -> execute([$id]);
+        }
+
+        // for the notification check
+        public function getUnseenRejections(int $userId): array
+        {
+            $pdo = Database::connect();
+            $stmt = $pdo -> prepare(
+                "SELECT * FROM confessions WHERE user_id = ? AND status = 'rejected' AND rejection_seen = FALSE"
+            );
+            $stmt -> execute([$userId]);
+            return $this -> toObjectArray($stmt -> fetchAll(PDO::FETCH_ASSOC));
+        }
+
+        public function markRejectionsSeen(int $userId): bool
+        {
+            $pdo = Database::connect();
+            $stmt = $pdo -> prepare(
+                "UPDATE confessions SET rejection_seen = TRUE WHERE user_id = ? AND status = 'rejected' AND rejection_seen = FALSE"
+            );
+            return $stmt -> execute([$userId]);
         }
 
         // helper function that converts raw associative row to an object array
@@ -395,7 +455,8 @@
                     $row['hearts'],
                     $row['status'],
                     $row['created_at'],
-                    $row['liked'] ?? false
+                    $row['liked'] ?? false,
+                    $row['rejection_reason'] ?? null
                 );
             }
 

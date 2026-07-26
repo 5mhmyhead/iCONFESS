@@ -25,6 +25,9 @@
             $page = max(1, (int) ($_GET['page'] ?? 1));
             $perPage = 20;
 
+            $unseenRejections = $userId ? $this -> confessionsService -> getUnseenRejections($userId) : [];
+            if ($unseenRejections) $this -> confessionsService -> markRejectionsSeen($userId);
+
             $confessions = $this -> confessionsService -> getFilteredConfessions($category, $campus, $sort, $keyword, $userId, $page, $perPage);
             $total = $this -> confessionsService -> countFilteredConfessions($category, $campus, $sort, $keyword);
             $totalPages = (int) ceil($total / $perPage);
@@ -44,7 +47,8 @@
                 'keyword' => $keyword,
                 'isLoggedIn' => $isLoggedIn,
                 'isModerator' => $isModerator,
-                'viewMode' => $viewMode
+                'viewMode' => $viewMode,
+                'unseenRejections' => $unseenRejections
             ]);
         }
 
