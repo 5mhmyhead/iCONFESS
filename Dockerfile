@@ -12,5 +12,4 @@ RUN composer install --no-dev --optimize-autoloader
 
 EXPOSE 8080
 
-ARG CACHEBUST=1
-CMD ["sh", "-c", "echo PORT is: $PORT && php -S 0.0.0.0:$PORT -t public"]
+CMD ["php", "-S", "0.0.0.0:8080", "-t", "public"]
