@@ -11,7 +11,7 @@
             $this -> userModel = new User();
             $this -> passwordResetModel = new PasswordReset();
             $this -> mailer = new Mailer();
-            $this -> mailConfig = require __DIR__ . '/../config/mail.php';
+            $this -> mailConfig = Config::mail();
         }
 
         public function registerUser(string $email, string $username, string $password, string $role = 'user'): array

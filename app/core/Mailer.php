@@ -8,7 +8,13 @@
 
         public function __construct()
         {
-            $this -> config = require __DIR__ . '/../config/mail.php';
+            $host = getenv('MAIL_HOST');
+
+            if ($host !== false) {
+                $this -> config = Config::mail();
+            } else {
+                $this -> config = require __DIR__ . '/../config/mail.php';
+            }
         }
 
         public function sendPasswordReset(string $toEmail, string $resetLink): bool

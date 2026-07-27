@@ -10,7 +10,7 @@
             $this -> layout = 'index';
             $this -> authService = new AuthService();
             $this -> confessionsService = new ConfessionsService();
-            $this -> authConfig = require __DIR__ . '/../config/auth.php';
+            $this -> authConfig = Config::auth();
         }
 
         public function index()

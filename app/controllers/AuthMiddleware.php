@@ -3,7 +3,7 @@
     {
         public static function requireAuth()
         {
-            $config = require __DIR__ . '/../config/auth.php';
+            $config = Config::auth();
 
             $token = null;
             $header = self::authorizationHeader();
@@ -33,7 +33,7 @@
         // confession feed will still be visible regardless if there is a token
         public static function optionalAuth(): ?array
         {
-            $config = require __DIR__ . '/../config/auth.php';
+            $config = Config::auth();
 
             $token = null;
             $header = self::authorizationHeader();
